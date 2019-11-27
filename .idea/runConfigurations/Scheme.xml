@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Scheme" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="ch.dabsoft.dabscheme.vm.Scheme" />
+    <module name="dabscheme" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ch.dabsoft.dabscheme.vm.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

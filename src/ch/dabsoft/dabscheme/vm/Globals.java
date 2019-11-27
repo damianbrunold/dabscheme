@@ -52,8 +52,9 @@ public class Globals {
         bind("string-ref", new PrimitiveStringRef());
         bind("char=?", new PrimitiveCharEqP());
         bind("error", new PrimitiveError());
-        bind("call-with-current-continuation", getCallCC());
         bind("values", new PrimitiveValues());
+        bind("call-with-current-continuation", getCallCC());
+        bind("apply", getApply());
     }
 
     private Object getCallCC() {
@@ -65,6 +66,17 @@ public class Globals {
         Lambda callcc = new Lambda(Value.NIL, instructions);
         callcc.name = "call-with-current-continuation";
         return callcc;
+    }
+
+    private Object getApply() {
+        List<Instruction> instructions = new ArrayList<>();
+        instructions.add(new Instruction(Opcode.ARGSDOT, 1));
+        instructions.add(new Instruction(Opcode.FLATTEN_APPLY, 0, 1));
+        instructions.add(new Instruction(Opcode.LVAR, 0, 0));
+        instructions.add(new Instruction(Opcode.CALLJ, -1));
+        Lambda apply = new Lambda(Value.NIL, instructions);
+        apply.name = "apply";
+        return apply;
     }
 
     public boolean isBound(String symbol) {

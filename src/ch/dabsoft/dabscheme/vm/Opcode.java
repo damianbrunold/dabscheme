@@ -19,6 +19,8 @@ public enum Opcode {
     ARGMV,
     FN,
     SETCC,
-    CC
+    CC,
+    FLATTEN_APPLY,
+    FLATTEN_MULTVALS,
 
 }

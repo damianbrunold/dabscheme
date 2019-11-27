@@ -11,6 +11,7 @@ public class VM {
     private Pair env = Value.NIL;
     private Pair stack = Value.NIL;
     private int nargs = 0;
+    private int flattened = 0;
 
     public VM(Globals globals) {
         this.globals = globals;
@@ -122,16 +123,21 @@ public class VM {
                     break;
                 }
 
-                case CALLJ:
+                case CALLJ: {
+                    int argcount = (int) instruction.arg1;
+                    if (argcount == -1) {
+                        argcount = flattened;
+                        flattened = 0;
+                    }
                     env = Value.asPair(env.cdr); // discard top frame
                     Object f = pop();
                     if (Value.isLambda(f)) {
                         this.fn = Value.asLambda(f);
                         env = fn.env;
                         ip = 0;
-                        nargs = (int) instruction.arg1;
+                        nargs = argcount;
                     } else if (Value.isPrimitive(f)) {
-                        Object[] args = new Object[(int) instruction.arg1];
+                        Object[] args = new Object[argcount];
                         nargs = args.length;
                         for (int i = args.length - 1; i >= 0; i--) args[i] = pop();
                         push(Value.asPrimitive(f).apply(args));
@@ -146,6 +152,7 @@ public class VM {
                         throw new IllegalStateException(f + " is not a function, cannot apply");
                     }
                     break;
+                }
 
                 case ARGS: {
                     if (nargs != (int) instruction.arg1)
@@ -197,6 +204,40 @@ public class VM {
                     newcode.add(new Instruction(Opcode.LVAR, 0, 0));
                     newcode.add(new Instruction(Opcode.RETURN));
                     push(new Lambda(Pair.list(Pair.list(stack)), newcode));
+                    break;
+                }
+
+                case FLATTEN_APPLY: {
+                    List<Object> args = new ArrayList<>();
+                    Pair pair = Value.asPair(getenv((int) instruction.arg1, (int) instruction.arg2));
+                    while (pair != Value.NIL) {
+                        if (pair.cdr == Value.NIL) {
+                            pair = Value.asPair(pair.car);
+                            while (pair != Value.NIL) {
+                                args.add(pair.car);
+                                pair = Value.asPair(pair.cdr);
+                            }
+                            break;
+                        } else {
+                            args.add(pair.car);
+                            pair = Value.asPair(pair.cdr);
+                        }
+                    }
+                    flattened = args.size();
+                    for (int i = 0; i < args.size(); i++) push(args.get(i));
+                    break;
+                }
+
+                case FLATTEN_MULTVALS: {
+                    Object val = getenv((int) instruction.arg1, (int) instruction.arg2);
+                    if (Value.isValues(val)) {
+                        Object[] values = Value.asValues(val).values;
+                        flattened = values.length;
+                        for (int i = 0; i < values.length; i++) push(values[i]);
+                    } else {
+                        flattened = 1;
+                        push(val);
+                    }
                     break;
                 }
 
