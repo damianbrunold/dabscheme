@@ -55,6 +55,7 @@ public class Globals {
         bind("values", new PrimitiveValues());
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());
+        bind("call-with-values", getCallWithValues());
     }
 
     private Object getCallCC() {
@@ -76,6 +77,20 @@ public class Globals {
         instructions.add(new Instruction(Opcode.CALLJ, -1));
         Lambda apply = new Lambda(Value.NIL, instructions);
         apply.name = "apply";
+        return apply;
+    }
+
+    private Object getCallWithValues() {
+        List<Instruction> instructions = new ArrayList<>();
+        instructions.add(new Instruction(Opcode.ARGS, 2));
+        instructions.add(new Instruction(Opcode.SAVE, 4));
+        instructions.add(new Instruction(Opcode.LVAR, 0, 0));
+        instructions.add(new Instruction(Opcode.CALLJ, 0));
+        instructions.add(new Instruction(Opcode.FLATTEN_MULTVALS, 0, 1));
+        instructions.add(new Instruction(Opcode.LVAR, 0, 1));
+        instructions.add(new Instruction(Opcode.CALLJ, -1));
+        Lambda apply = new Lambda(Value.NIL, instructions);
+        apply.name = "call-with-values";
         return apply;
     }
 

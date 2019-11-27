@@ -114,3 +114,25 @@ odd
 =>
 #t
 <<
+
+(apply + 1 2 3 '(4 5))
+=>
+15
+.
+(apply (lambda (x y) (+ (* x x) (* y y))) '(3 4))
+=>
+25
+<<
+
+(call-with-values
+    (lambda () (values 1 2 3))
+  (lambda (x y z) (list x y z)))
+=>
+(1 2 3)
+<<
+
+(receive (a b) (values 1 2)
+  (list a b))
+=>
+(1 2)
+<<

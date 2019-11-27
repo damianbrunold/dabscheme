@@ -229,7 +229,7 @@ public class VM {
                 }
 
                 case FLATTEN_MULTVALS: {
-                    Object val = getenv((int) instruction.arg1, (int) instruction.arg2);
+                    Object val = pop();
                     if (Value.isValues(val)) {
                         Object[] values = Value.asValues(val).values;
                         flattened = values.length;
