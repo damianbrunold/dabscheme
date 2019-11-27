@@ -43,6 +43,7 @@ public class Globals {
         bind("vector?", new PrimitiveVectorP());
         bind("lambda?", new PrimitiveLambdaP());
         bind("primitive?", new PrimitivePrimitiveP());
+        bind("sqrt", new PrimitiveSqrt());
         bind("gensym", new PrimitiveGensym());
         bind("compile", new PrimitiveCompile(this));
         bind("vector-length", new PrimitiveVectorLength());

@@ -136,3 +136,28 @@ odd
 =>
 (1 2)
 <<
+
+(let ((same-count 0))
+  (for-each
+   (lambda (x y)
+     (if (= x y)
+	 (set! same-count (+ same-count 1))))
+   '(1 2 3 4 5 6)
+   '(2 3 3 4 7 6))
+  same-count)
+=>
+3
+<<
+
+(sqrt 25)
+=>
+5
+.
+(sqrt 9)
+=>
+3
+.
+(sqrt 9.0)
+=>
+3.0
+<<

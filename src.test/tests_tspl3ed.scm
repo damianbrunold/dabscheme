@@ -690,3 +690,153 @@ a
 =>
 6800.0
 <<
+
+(define length
+  (lambda (ls)
+    (if (null? ls)
+	0
+	(+ (length (cdr ls)) 1))))
+=
+(length '())
+=>
+0
+.
+(length '(a))
+=>
+1
+.
+(length '(a b))
+=>
+2
+<<
+
+(define list-copy
+  (lambda (ls)
+    (if (null? ls)
+	'()
+	(cons (car ls)
+	      (list-copy (cdr ls))))))
+=
+(list-copy '())
+=>
+()
+.
+(list-copy '(a b c))
+=>
+(a b c)
+<<
+
+(define memv
+  (lambda (x ls)
+    (cond
+     ((null? ls) #f)
+     ((eqv? (car ls) x) ls)
+     (else (memv x (cdr ls))))))
+=
+(memv 'a '(a b b d))
+=>
+(a b b d)
+.
+(memv 'b '(a b b d))
+=>
+(b b d)
+.
+(memv 'c '(a b b d))
+=>
+#f
+.
+(memv 'd '(a b b d))
+=>
+(d)
+.
+(if (memv 'b '(a b b d))
+    "yes"
+    "no")
+=>
+"yes"
+<<
+
+(define remv
+  (lambda (x ls)
+    (cond
+     ((null? ls) '())
+     ((eqv? (car ls) x) (remv x (cdr ls)))
+     (else (cons (car ls) (remv x (cdr ls)))))))
+=
+(remv 'a '(a b b d))
+=>
+(b b d)
+.
+(remv 'b '(a b b d))
+=>
+(a d)
+.
+(remv 'c '(a b b d))
+=>
+(a b b d)
+.
+(remv 'd '(a b b d))
+=>
+(a b b)
+<<
+
+(define tree-copy
+  (lambda (tr)
+    (if (not (pair? tr))
+	tr
+	(cons (tree-copy (car tr))
+	      (tree-copy (cdr tr))))))
+=
+(tree-copy '((a . b) . c))
+=>
+((a . b) . c)
+<<
+
+(define abs-all
+  (lambda (ls)
+    (if (null? ls)
+	'()
+	(cons (abs (car ls))
+	      (abs-all (cdr ls))))))
+=
+(abs-all '(1 -2 3 -4 5 -6))
+=>
+(1 2 3 4 5 6)
+<<
+
+(define abs-all
+  (lambda (ls)
+    (map abs ls)))
+=
+(abs-all '(1 -2 3 -4 5 -6))
+=>
+(1 2 3 4 5 6)
+<<
+
+(map abs '(1 -2 3 -4 5 -6))
+=>
+(1 2 3 4 5 6)
+<<
+
+(map (lambda (x) (* x x))
+     '(1 -3 -5 7))
+=>
+(1 9 25 49)
+<<
+
+(map cons '(a b c) '(1 2 3))
+=>
+((a . 1) (b . 2) (c . 3))
+<<
+
+(define map1
+  (lambda (p ls)
+    (if (null? ls)
+	'()
+	(cons (p (car ls))
+	      (map1 p (cdr ls))))))
+=
+(map1 abs '(1 -2 3 -4 5 -6))
+=>
+(1 2 3 4 5 6)
+<<

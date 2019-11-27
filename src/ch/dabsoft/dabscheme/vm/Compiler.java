@@ -169,6 +169,7 @@ public class Compiler {
         if (Value.isSymbol(x)) return compVar(Value.asSymbol(x), env, val, more);
         if (Value.isAtom(x)) return compConst(x, val, more);
         if (Value.isVector(x)) return compConst(x, val, more);
+        if (Value.isValues(x)) return compConst(x, val, more);
         Object first = Value.asPair(x).first();
         if (Value.isSymbol(first) && inEnvP(Value.asSymbol(first), env) == Value.F && globals.isBound(Value.asSymbol(first))) {
             Object obj = globals.resolve(Value.asSymbol(first));
@@ -193,7 +194,13 @@ public class Compiler {
                     val ? Value.NIL : gen(Opcode.POP),
                     more ? Value.NIL : gen(Opcode.RETURN));
         }
-        if (first.equals("if")) return compIf(Value.asPair(x).second(), Value.asPair(x).third(), Value.asPair(x).fourth(), env, val, more);
+        if (first.equals("if")) {
+            if (Value.asPair(x).length() == 4) {
+                return compIf(Value.asPair(x).second(), Value.asPair(x).third(), Value.asPair(x).fourth(), env, val, more);
+            } else {
+                return compIf(Value.asPair(x).second(), Value.asPair(x).third(), new Values(), env, val, more);
+            }
+        }
         if (first.equals("lambda")) {
             if (!val) return Value.NIL;
             Pair f = compLambda(Value.asPair(x).second(), Value.asPair(x).nthCdr(2), env);
