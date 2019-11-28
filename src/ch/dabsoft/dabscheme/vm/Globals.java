@@ -32,6 +32,8 @@ public class Globals {
         bind("cons", new PrimitiveCons());
         bind("car", new PrimitiveCar());
         bind("cdr", new PrimitiveCdr());
+        bind("set-car!", new PrimitiveSetCarB());
+        bind("set-cdr!", new PrimitiveSetCdrB());
         bind("append", new PrimitiveAppend());
         bind("pair?", new PrimitivePairP());
         bind("symbol?", new PrimitiveSymbolP());

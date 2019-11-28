@@ -416,3 +416,15 @@
   (do ((ls ls (cdr ls)) (more more (map cdr more)))
       ((null? ls))
     (apply f (car ls) (map car more))))
+
+(defmacro unless
+  (lambda (expr)
+    (let ((test (car expr))
+	  (body (cdr expr)))
+      `(if (not ,test) (begin ,@body)))))
+
+(defmacro when
+  (lambda (expr)
+    (let ((test (car expr))
+	  (body (cdr expr)))
+      `(if ,test (begin ,@body)))))
