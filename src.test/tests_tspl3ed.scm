@@ -1489,3 +1489,30 @@ d
 =>
 0
 <<
+
+(define f (lambda (x) (* x x)))
+=
+(let ((x 3))
+  (define f (lambda (y) (+ y x)))
+  (f 4))
+=>
+7
+.
+(f 4)
+=>
+16
+<<
+
+(let ()
+  (define even?
+    (lambda (x)
+      (or (= x 0)
+	  (odd? (- x 1)))))
+  (define odd?
+    (lambda (x)
+      (and (not (= x 0))
+	   (even? (- x 1)))))
+  (even? 20))
+=>
+#t
+<<
