@@ -112,7 +112,7 @@
 ; val ...)
 (defmacro let
   (lambda (expr)
-    (if (pair? (first expr))
+    (if (if (pair? (first expr)) #t (null? (first expr)))
 	(append (list (append (list 'lambda)
 			      (list (map first (first expr)))
 			      (cdr expr)))
@@ -124,6 +124,7 @@
 								(cddr expr))))))
 			      (list (first expr))))
 		(map second (second expr))))))
+		  
 
 ;(letrec ((var val) ...) body ...)
 ;=>

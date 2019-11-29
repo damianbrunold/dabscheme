@@ -203,12 +203,60 @@ public class Compiler {
         }
         if (first.equals("lambda")) {
             if (!val) return Value.NIL;
+            x = resolveInternalDefinitions(x);
             Pair f = compLambda(Value.asPair(x).second(), Value.asPair(x).nthCdr(2), env);
             return seq(
                     gen(Opcode.FN, f),
                     more ? Value.NIL : gen(Opcode.RETURN));
         }
         return compFuncall(first, Value.asPair(x).cdr, env, val, more);
+    }
+
+    private Object resolveInternalDefinitions(Object x) {
+        if (!Value.isPair(x)) return x;
+        Pair expr = Value.asPair(x);
+        if (!expr.first().equals("lambda")) return x;
+        Object params = expr.second();
+        List<Pair> defines = new ArrayList<>();
+        List<Object> expressions = new ArrayList<>();
+        int length = expr.length();
+        boolean indefines = true;
+        for (int i = 2; i < length; i++) {
+            Object current = expr.nth(i);
+            if (!indefines) {
+                expressions.add(current);
+            } else if (Value.isPair(current) && Value.asPair(current).car.equals("define")) {
+                defines.add(Value.asPair(current));
+            } else {
+                indefines = false;
+                expressions.add(current);
+            }
+        }
+        if (defines.isEmpty()) return x;
+        List<Object> varval = new ArrayList<>();
+        for (Pair define : defines) {
+            Pair def = Value.asPair(define.cdr);
+            if (Value.isPair(def.car)) {
+                String name = Value.asSymbol(Value.asPair(def.car).first());
+                Object args = Value.asPair(def.car).cdr;
+                Object body = def.cdr;
+                List<Object> lambda = new ArrayList<>();
+                lambda.add(Value.intern("lambda"));
+                lambda.add(args);
+                while (body != Value.NIL) {
+                    lambda.add(Value.asPair(body).car);
+                    body = Value.asPair(body).cdr;
+                }
+                varval.add(Pair.list(name, Pair.list(lambda.toArray())));
+            } else {
+                varval.add(def);
+            }
+        }
+        List<Object> letrec = new ArrayList<>();
+        letrec.add(Value.intern("letrec"));
+        letrec.add(Pair.list(varval.toArray()));
+        letrec.addAll(expressions);
+        return Pair.list(Value.intern("lambda"), params, Pair.list(letrec.toArray()));
     }
 
 /*
