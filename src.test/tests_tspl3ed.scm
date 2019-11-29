@@ -1135,3 +1135,357 @@ d
 =>
 8
 <<
+
+(let ((sum (lambda (sum ls)
+	     (if (null? ls)
+		 0
+		 (+ (car ls) (sum sum (cdr ls)))))))
+  (sum sum '(1 2 3 4 5)))
+=>
+15
+<<
+
+(letrec ((sum (lambda (ls)
+		(if (null? ls)
+		    0
+		    (+ (car ls) (sum (cdr ls)))))))
+  (sum '(1 2 3 4 5)))
+=>
+15
+<<
+
+(letrec ((even?
+	  (lambda (x)
+	    (or (= x 0)
+		(odd? (- x 1)))))
+	 (odd?
+	  (lambda (x)
+	    (and (not (= x 0))
+		 (even? (- x 1))))))
+  (list (even? 20) (odd? 20)))
+=>
+(#t #f)
+<<
+
+(letrec ((f (lambda () (+ x 2)))
+	 (x 1))
+  (f))
+=>
+3
+<<
+
+(define factorial
+  (lambda (n)
+    (let fact ((i n))
+      (if (= i 0)
+	  1
+	  (* i (fact (- i 1)))))))
+=
+(factorial 0)
+=>
+1
+.
+(factorial 1)
+=>
+1
+.
+(factorial 2)
+=>
+2
+.
+(factorial 3)
+=>
+6
+.
+(factorial 10)
+=>
+3628800
+<<
+
+(define factorial
+  (lambda (n)
+    (let fact ((i n) (a 1))
+      (if (= i 0)
+	  a
+	  (fact (- i 1) (* a i))))))
+=
+(factorial 0)
+=>
+1
+.
+(factorial 1)
+=>
+1
+.
+(factorial 2)
+=>
+2
+.
+(factorial 3)
+=>
+6
+.
+(factorial 10)
+=>
+3628800
+<<
+
+(define fibonacci
+  (lambda (n)
+    (let fib ((i n))
+      (cond
+       ((= i 0) 0)
+       ((= i 1) 1)
+       (else (+ (fib (- i 1)) (fib (- i 2))))))))
+=
+(fibonacci 0)
+=>
+0
+.
+(fibonacci 1)
+=>
+1
+.
+(fibonacci 2)
+=>
+1
+.
+(fibonacci 3)
+=>
+2
+.
+(fibonacci 4)
+=>
+3
+.
+(fibonacci 5)
+=>
+5
+.
+(fibonacci 6)
+=>
+8
+.
+(fibonacci 20)
+=>
+6765
+<<
+
+(define fibonacci
+  (lambda (n)
+    (if (= n 0)
+	0
+	(let fib ((i n) (a1 1) (a2 0))
+	  (if (= i 1)
+	      a1
+	      (fib (- i 1) (+ a1 a2) a1))))))
+=
+(fibonacci 0)
+=>
+0
+.
+(fibonacci 1)
+=>
+1
+.
+(fibonacci 2)
+=>
+1
+.
+(fibonacci 3)
+=>
+2
+.
+(fibonacci 4)
+=>
+3
+.
+(fibonacci 5)
+=>
+5
+.
+(fibonacci 6)
+=>
+8
+.
+(fibonacci 20)
+=>
+6765
+.
+(fibonacci 30)
+=>
+832040
+<<
+
+(define factor
+  (lambda (n)
+    (let f ((n n) (i 2))
+      (cond
+       ((>= i n) (list n))
+       ((integer? (/ n i))
+	(cons i (f (/ n i) i)))
+       (else (f n (+ i 1)))))))
+=
+(factor 0)
+=>
+(0)
+.
+(factor 1)
+=>
+(1)
+.
+(factor 12)
+=>
+(2 2 3)
+.
+(factor 3628800)
+=>
+(2 2 2 2 2 2 2 2 3 3 3 3 5 5 7)
+.
+(factor 9239)
+=>
+(9239)
+<<
+
+(call/cc
+ (lambda (k)
+   (* 5 4)))
+=>
+20
+<<
+
+(call/cc
+ (lambda (k)
+   (* 5 (k 4))))
+=>
+4
+<<
+
+(+ 2
+   (call/cc
+    (lambda (k)
+      (* 5 (k 4)))))
+=>
+6
+<<
+
+(define product
+  (lambda (ls)
+    (call/cc
+     (lambda (break)
+       (let f ((ls ls))
+	 (cond
+	  ((null? ls) 1)
+	  ((= (car ls) 0) (break 0))
+	  (else (* (car ls) (f (cdr ls))))))))))
+=
+(product '(1 2 3 4 5))
+=>
+120
+.
+(product '(7 3 8 0 1 9 5))
+=>
+0
+<<
+
+(let ((x (call/cc (lambda (k) k))))
+  (x (lambda (ignore) "hi")))
+=>
+"hi"
+<<
+
+(((call/cc (lambda (k) k)) (lambda (x) x)) "HEY!")
+=>
+"HEY!"
+<<
+
+(define retry #f)
+(define factorial
+  (lambda (x)
+    (if (= x 0)
+	(call/cc (lambda (k) (set! retry k) 1))
+	(* x (factorial (- x 1))))))
+=
+(factorial 4)
+=>
+24
+.
+(retry 1)
+=>
+24
+.
+(retry 2)
+=>
+48
+<<
+
+(letrec ((f (lambda (x) (cons 'a x)))
+	 (g (lambda (x) (cons 'b (f x))))
+	 (h (lambda (x) (g (cons 'c x)))))
+  (cons 'd (h '())))
+=>
+(d b a c)
+<<
+
+(letrec ((f (lambda (x k) (k (cons 'a x))))
+	 (g (lambda (x k) (f x (lambda (v) (k (cons 'b v))))))
+	 (h (lambda (x k) (g (cons 'c x) k))))
+  (h '() (lambda (v) (cons 'd v))))
+=>
+(d b a c)
+<<
+
+(define car&cdr
+  (lambda (p k)
+    (k (car p) (cdr p))))
+=
+(car&cdr '(a b c)
+	 (lambda (x y)
+	   (list y x)))
+=>
+((b c) a)
+.
+(car&cdr '(a b c) cons)
+=>
+(a b c)
+.
+(car&cdr '(a b c a d) memv)
+=>
+(a d)
+<<
+
+(define integer-divide
+  (lambda (x y success failure)
+    (if (= y 0)
+	(failure "divide by zero")
+	(let ((q (quotient x y)))
+	  (success q (- x (* q y)))))))
+=
+(integer-divide 10 3 list (lambda (x) x))
+=>
+(3 1)
+.
+(integer-divide 10 0 list (lambda (x) x))
+=>
+"divide by zero"
+<<
+
+(define product
+  (lambda (ls k)
+    (let ((break k))
+      (let f ((ls ls) (k k))
+	(cond
+	 ((null? ls) (k 1))
+	 ((= (car ls) 0) (break 0))
+	 (else (f (cdr ls)
+		  (lambda (x)
+		    (k (* (car ls) x))))))))))
+=
+(product '(1 2 3 4 5) (lambda (x) x))
+=>
+120
+.
+(product '(7 3 8 0 1 9 5) (lambda (x) x))
+=>
+0
+<<

@@ -59,6 +59,7 @@ public class SchemeTests {
             }
         }
         System.out.println(tests + " tests run");
+        System.out.println();
         if (!success) Assert.fail("Tests failed, see output for details");
     }
 
