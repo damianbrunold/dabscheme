@@ -1568,3 +1568,401 @@ d
 =>
 ("invalid operator" pow)
 <<
+
+list
+=>
+#<list>
+<<
+
+(define x 'a)
+=
+(list x x)
+=>
+(a a)
+.
+(let ((x 'b))
+  (list x x))
+=>
+(b b)
+.
+(let ((let 'let)) let)
+=>
+let
+<<
+
+(define f
+  (lambda (x)
+    (g x)))
+(define g
+  (lambda (x)
+    (+ x x)))
+(f 3)
+=>
+6
+<<
+
+(lambda (x) (+ x 3))
+=>
+#<lambda>
+.
+((lambda (x) (+ x 3)) 7)
+=>
+10
+.
+((lambda (x y) (* x (+ x y))) 7 13)
+=>
+140
+.
+((lambda (f x) (f x x)) + 11)
+=>
+22
+.
+((lambda () (+ 3 4)))
+=>
+7
+.
+((lambda (x . y) (list x y))
+ 28 37)
+=>
+(28 (37))
+.
+((lambda (x . y) (list x y))
+ 28 37 47 28)
+=>
+(28 (37 47 28))
+.
+((lambda (x y . z) (list x y z))
+ 1 2 3 4)
+=>
+(1 2 (3 4))
+.
+((lambda x x) 7 13)
+=>
+(7 13)
+<<
+
+(let ((x (* 3.0 3.0)) (y (* 4.0 4.0)))
+  (sqrt (+ x y)))
+=>
+5.0
+.
+(let ((x 'a) (y '(b c)))
+  (cons x y))
+=>
+(a b c)
+.
+(let ((x 0) (y 1))
+  (let ((x y) (y x))
+    (list x y)))
+=>
+(1 0)
+<<
+
+(let* ((x (* 5.0 5.0))
+       (y (- x (* 4.0 4.0))))
+  (sqrt y))
+=>
+3.0
+.
+(let ((x 0) (y 1))
+  (let* ((x y) (y x))
+    (list x y)))
+=>
+(1 1)
+<<
+
+(letrec ((sum (lambda (x)
+		(if (zero? x)
+		    0
+		    (+ x (sum (- x 1)))))))
+  (sum 5))
+=>
+15
+<<
+
+(define x 3)
+x
+=>
+3
+.
+(define f
+  (lambda (x y)
+    (* (+ x y) 2)))
+(f 5 4)
+=>
+18
+.
+(define (sum-of-squares x y)
+  (+ (* x x) (* y y)))
+(sum-of-squares 3 4)
+=>
+25
+<<
+
+(define f
+  (lambda (x)
+    (+ x 1)))
+=
+(let ((x 2))
+  (define f
+    (lambda (y)
+      (+ y x)))
+  (f 3))
+=>
+5
+.
+(f 3)
+=>
+4
+<<
+
+(define flip-flop
+  (let ((state #f))
+    (lambda ()
+      (set! state (not state))
+      state)))
+=
+(flip-flop)
+=>
+#t
+.
+(flip-flop)
+=>
+#f
+.
+(flip-flop)
+=>
+#t
+<<
+
+(define memoize
+  (lambda (proc)
+    (let ((cache '()))
+      (lambda (x)
+	(cond
+	 ((assq x cache) => cdr)
+	 (else (let ((ans (proc x)))
+		 (set! cache (cons (cons x ans) cache))
+		 ans)))))))
+(define fibonacci
+  (memoize
+   (lambda (n)
+     (if (< n 2)
+	 n
+	 (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))))
+(fibonacci 30)
+=>
+832040
+<<
+
+(+ 3 4)
+=>
+7
+.
+((if (odd? 3) + -) 6 2)
+=>
+8
+.
+((lambda (x) x) 5)
+=>
+5
+.
+(let ((f (lambda (x) (+ x x))))
+  (f 8))
+=>
+16
+<<
+
+
+(apply + '(4 5))
+=>
+9
+.
+(apply min '(6 8 3 2 5))
+=>
+2
+.
+(apply min 5 1 3 '(6 8 3 2 5))
+=>
+1
+.
+(apply vector 'a 'b '(c d e))
+=>
+#(a b c d e)
+<<
+
+(define first
+  (lambda (l)
+    (apply (lambda (x . y) x)
+	   l)))
+(define rest
+  (lambda (l)
+    (apply (lambda (x . y) y)
+	   l)))
+=
+(first '(a b c d))
+=>
+a
+.
+(rest '(a b c d))
+=>
+(b c d)
+<<
+
+(define x 3)
+(begin
+  (set! x (+ x 1))
+  (+ x x))
+=>
+8
+<<
+
+(let ()
+  (begin (define x 3) (define y 4))
+  (+ x y))
+=>
+7
+<<
+
+(define x 2)
+(let ()
+  (begin (define x 3) (define y 4))
+  (+ x y))
+x
+=>
+2
+<<
+
+(define swap-pair!
+  (lambda (x)
+    (let ((temp (car x)))
+      (set-car! x (cdr x))
+      (set-cdr! x temp)
+      x)))
+(swap-pair! (cons 'a 'b))
+=>
+(b . a)
+<<
+
+(let ((l '(a b c)))
+  (if (null? l)
+      '()
+      (cdr l)))
+=>
+(b c)
+<<
+
+(let ((l '()))
+  (if (null? l)
+      '()
+      (cdr l)))
+=>
+()
+<<
+
+(let ((abs
+       (lambda (x)
+	 (if (< x 0)
+	     (- 0 x)
+	     x))))
+  (abs -4))
+=>
+4
+<<
+
+(let ((x -4))
+  (if (< x 0)
+      (list 'minus (- 0 x))
+      (list 'plus x)))
+=>
+(minus 4)
+<<
+
+(not #f)
+=>
+#t
+.
+(not #t)
+=>
+#f
+.
+(not '())
+=>
+#f
+.
+(not (< 4 6))
+=>
+#f
+<<
+
+(let ((x 3))
+  (and (> x 2) (< x 4)))
+=>
+#t
+.
+(let ((x 5))
+  (and (> x 2) (< x 4)))
+=>
+#f
+.
+(and #f '(a b) '(c d))
+=>
+#f
+.
+(and '(a b) '(c d) '(e f))
+=>
+(e f)
+<<
+
+(let ((x 3))
+  (or (< x 2) (> x 4)))
+=>
+#f
+.
+(let ((x 5))
+  (or (< x 2) (> x 4)))
+=>
+#t
+.
+(or #f '(a b) '(c d))
+=>
+(a b)
+<<
+
+(let ((x 0))
+  (cond
+   ((< x 0) (list 'minus (abs x)))
+   ((> x 0) (list 'plus x))
+   (else (list 'zero x))))
+=>
+(zero 0)
+<<
+
+(define select
+  (lambda (x)
+    (cond
+     ((not (symbol? x)))
+     ((assq x '((a . 1) (b . 2) (c . 3))) => cdr)
+     (else 0))))
+=
+(select 3)
+=>
+#t
+.
+(select 'b)
+=>
+2
+.
+(select 'e)
+=>
+0
+<<
+
+(let ((x 4) (y 5))
+  (case (+ x y)
+    ((1 3 5 7 9) 'odd)
+    ((0 2 4 6 8) 'even)
+    (else 'out-of-range)))
+=>
+odd
+<<

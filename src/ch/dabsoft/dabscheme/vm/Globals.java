@@ -11,10 +11,8 @@ public class Globals {
 
     private Map<String, Object> globals = new HashMap<>();
 
-    private Globals(Globals copyfrom) {
-        for (Map.Entry<String, Object> entry : copyfrom.globals.entrySet()) {
-            globals.put(entry.getKey(), entry.getValue());
-        }
+    public Globals(Globals copyfrom) {
+        this.globals.putAll(copyfrom.globals);
     }
 
     public Globals() {
@@ -112,8 +110,9 @@ public class Globals {
         globals.put(Value.intern(symbol), value);
     }
 
-    public Globals copy() {
-        return new Globals(this);
+    public void resetTo(Globals base) {
+        this.globals.clear();
+        this.globals.putAll(base.globals);
     }
 
 }

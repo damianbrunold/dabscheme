@@ -33,6 +33,11 @@ public class SchemeTests {
         runTests("/tests_general.scm");
     }
 
+    @Test
+    public void testTests() throws IOException {
+        runTests("/tests_tests.scm");
+    }
+
     public void runTests(String filename) throws IOException {
         System.out.println("Testfile " + filename);
         boolean success = true;
@@ -57,6 +62,7 @@ public class SchemeTests {
                     System.out.println();
                 }
             }
+            scheme.reset();
         }
         System.out.println(tests + " tests run");
         System.out.println();

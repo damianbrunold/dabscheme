@@ -67,11 +67,6 @@
       (- n)
       n))
 
-(define (sign n)
-  (cond ((< n 0) -1)
-	((> n 0) +1)
-	(else 0)))
-
 ; this is not tail recursive, will be replaced as soon as named-let is available
 (define (length x)
   (if (null? x)
@@ -209,6 +204,11 @@
 			    (append (list 'cond) (cdr expr))))
 		  (list 'or (car clause)
 			(append (list 'cond) (cdr expr)))))))))
+
+(define (sign n)
+  (cond ((< n 0) -1)
+	((> n 0) +1)
+	(else 0)))
 
 ; if performance is an issue, this could be made primitive
 (define (string=? a b)
@@ -429,3 +429,25 @@
     (let ((test (car expr))
 	  (body (cdr expr)))
       `(if ,test (begin ,@body)))))
+
+(define (min . ls)
+  (let loop ((ls ls) (m (car ls)))
+    (cond ((null? ls) m)
+	  ((< (car ls) m)
+	   (loop (cdr ls) (car ls)))
+	  (else
+	   (loop (cdr ls) m)))))
+
+(define (max . ls)
+  (let loop ((ls ls) (m (car ls)))
+    (cond ((null? ls) m)
+	  ((> (car ls) m)
+	   (loop (cdr ls) (car ls)))
+	  (else
+	   (loop (cdr ls) m)))))
+
+(define (even? n)
+  (= n (* 2 (quotient n 2))))
+
+(define (odd? n)
+  (not (even? n)))

@@ -14,11 +14,11 @@ public class Scheme {
 
     public Scheme() throws IOException {
         loadLibraries();
-        rootGlobals = globals.copy();
+        rootGlobals = new Globals(globals);
     }
 
     public void reset() {
-        globals = rootGlobals.copy();
+        globals.resetTo(rootGlobals);
     }
 
     public Token readToken(PushbackReader in) throws IOException {

@@ -227,6 +227,13 @@ public class Compiler {
                 expressions.add(current);
             } else if (Value.isPair(current) && Value.asPair(current).car.equals("define")) {
                 defines.add(Value.asPair(current));
+            } else if (Value.isPair(current) && Value.asPair(current).car.equals("begin") &&
+                    Value.isPair(Value.asPair(current).second()) && Value.asPair(Value.asPair(current).second()).car.equals("define") ) {
+                // if we encounter a (begin (define ...) ...) then we assume that ALL expressions
+                // in the begin are defines and rearrange them accordingly.
+                for (int j = 1; j < Value.asPair(current).length(); j++) {
+                    defines.add(Value.asPair(Value.asPair(current).nth(j)));
+                }
             } else {
                 indefines = false;
                 expressions.add(current);
@@ -421,6 +428,7 @@ public class Compiler {
     private Pair compFuncall(Object f, Object args, Pair env, boolean val, boolean more) {
         if (Value.isPair(f) && Value.asPair(f).car.equals(Value.intern("lambda")) && Value.asPair(f).second() == Value.NIL) {
             // ((lambda () body)) ==> (begin body)
+            f = resolveInternalDefinitions(f);
             return compBegin(Value.asPair(f).nthCdr(2), env, val, more);
         }
         if (more) {
