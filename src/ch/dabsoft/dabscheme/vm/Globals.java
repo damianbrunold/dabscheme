@@ -49,6 +49,7 @@ public class Globals {
         bind("vector-length", new PrimitiveVectorLength());
         bind("vector-ref", new PrimitiveVectorRef());
         bind("vector", new PrimitiveVector());
+        bind("vector-set!", new PrimitiveVectorSetB());
         bind("string-length", new PrimitiveStringLength());
         bind("string-ref", new PrimitiveStringRef());
         bind("char=?", new PrimitiveCharEqP());

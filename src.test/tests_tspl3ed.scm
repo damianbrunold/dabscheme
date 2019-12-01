@@ -1966,3 +1966,126 @@ x
 =>
 odd
 <<
+
+(define divisors
+  (lambda (n)
+    (let f ((i 2))
+      (cond
+       ((>= i n) '())
+       ((integer? (/ n i))
+	(cons i (f (+ i 1))))
+       (else (f (+ i 1)))))))
+=
+(divisors 5)
+=>
+()
+.
+(divisors 32)
+=>
+(2 4 8 16)
+<<
+
+(define divisors
+  (lambda (n)
+    (let f ((i 2) (ls '()))
+      (cond
+       ((>= i n) (reverse ls))
+       ((integer? (/ n i))
+	(f (+ i 1) (cons i ls)))
+       (else (f (+ i 1) ls))))))
+=
+(divisors 5)
+=>
+()
+.
+(divisors 32)
+=>
+(2 4 8 16)
+<<
+
+(define factorial
+  (lambda (n)
+    (do ((i n (- i 1)) (a 1 (* a i)))
+	((zero? i) a))))
+(factorial 10)
+=>
+3628800
+<<
+
+(define fibonacci
+  (lambda (n)
+    (if (= n 0)
+	0
+	(do ((i n (- i 1)) (a1 1 (+ a1 a2)) (a2 0 a1))
+	    ((= i 1) a1)))))
+(fibonacci 6)
+=>
+8
+<<
+
+(define divisors
+  (lambda (n)
+    (do ((i 2 (+ i 1))
+	 (ls '()
+	     (if (integer? (/ n i))
+		 (cons i ls)
+		 ls)))
+	((>= i n) (reverse ls)))))
+(divisors 32)
+=>
+(2 4 8 16)
+<<
+
+(define scale-vector!
+  (lambda (v k)
+    (let ((n (vector-length v)))
+      (do ((i 0 (+ i 1)))
+	  ((= i n))
+	(vector-set! v i (* (vector-ref v i) k))))))
+(define vec (vector 1 2 3 4 5))
+(scale-vector! vec 2)
+vec
+=>
+#(2 4 6 8 10)
+<<
+
+(map abs '(1 -2 3 -4 5 -6))
+=>
+(1 2 3 4 5 6)
+.
+(map (lambda (x y) (* x y))
+     '(1 2 3 4)
+     '(8 7 6 5))
+=>
+(8 14 18 20)
+<<
+
+(let ((same-count 0))
+  (for-each
+   (lambda (x y)
+     (if (= x y)
+	 (set! same-count (+ same-count 1))))
+   '(1 2 3 4 5 6)
+   '(2 3 3 4 7 6))
+  same-count)
+=>
+3
+<<
+
+(define member
+  (lambda (x ls)
+    (call/cc
+     (lambda (break)
+       (do ((ls ls (cdr ls)))
+	   ((null? ls) #f)
+	 (if (equal? x (car ls))
+	     (break ls)))))))
+=
+(member 'd '(a b c))
+=>
+#f
+.
+(member 'b '(a b c))
+=>
+(b c)
+<<
