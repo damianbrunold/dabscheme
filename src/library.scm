@@ -451,3 +451,58 @@
 
 (define (odd? n)
   (not (even? n)))
+
+(define (list-tail ls n)
+  (if (= n 0)
+      ls
+      (list-tail (cdr ls) (- n 1))))
+
+(define dynamic-wind #f)
+(let ((winders '()))
+  (define common-tail
+    (lambda (x y)
+      (let ((lx (length x)) (ly (length y)))
+	(do ((x (if (> lx ly) (list-tail x (- lx ly)) x) (cdr x))
+	     (y (if (> ly lx) (list-tail y (- ly lx)) y) (cdr y)))
+	    ((eq? x y) x)))))
+  (define do-wind
+    (lambda (new)
+      (let ((tail (common-tail new winders)))
+	(let f ((l winders))
+	  (if (not (eq? l tail))
+	      (begin
+		(set! winders (cdr l))
+		((cdar l))
+		(f (cdr l)))))
+	(let f ((l new))
+	  (if (not (eq? l tail))
+	      (begin
+		(f (cdr l))
+		((caar l))
+		(set! winders l)))))))
+  (set! call/cc
+	(let ((c call/cc))
+	  (lambda (f)
+	    (c (lambda (k)
+		 (f (let ((save winders))
+		      (lambda (x)
+			(if (not (eq? save winders)) (do-wind save))
+			(k x)))))))))
+  (set! call-with-current-continuation call/cc)
+  (set! dynamic-wind
+	(lambda (in body out)
+	  (in)
+	  (set! winders (cons (cons in out) winders))
+	  (let ((ans (body)))
+	    (set! winders (cdr winders))
+	    (out)
+	    ans))))
+
+(defmacro unwind-protect
+  (lambda (expr)
+    (let ((body (car expr))
+	  (cleanup (cdr expr)))
+      `(dynamic-wind
+	   (lambda () #f)
+	   (lambda () ,body)
+	   (lambda () ,@cleanup)))))

@@ -2089,3 +2089,13 @@ vec
 =>
 (b c)
 <<
+
+((call/cc
+  (let ((x 'a))
+    (lambda (k)
+      (unwind-protect
+       (k (lambda () x))
+       (set! x 'b))))))
+=>
+b
+<<
