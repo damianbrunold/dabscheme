@@ -106,9 +106,9 @@ public class Value {
     private static String printRepValues(Values values) {
         StringBuilder result = new StringBuilder();
         for (Object value : values.values) {
-            result.append(printRep(value)).append("\r\n");
+            result.append(printRep(value)).append("\n");
         }
-        if (result.length() > 0) result.setLength(result.length() - 2);
+        if (result.length() > 0) result.setLength(result.length() - 1);
         return result.toString();
     }
 

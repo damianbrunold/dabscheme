@@ -180,7 +180,7 @@ public class VM {
                     } else {
                         Values mv = new Values();
                         mv.values = new Object[nargs];
-                        for (int i = 0; i < nargs; i++) mv.values[i] = pop();
+                        for (int i = nargs - 1; i >= 0; i--) mv.values[i] = pop();
                         env = new Pair(new Pair(mv, Value.NIL), env);
                     }
                     break;

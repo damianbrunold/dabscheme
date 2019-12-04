@@ -485,9 +485,9 @@
 	  (lambda (f)
 	    (c (lambda (k)
 		 (f (let ((save winders))
-		      (lambda (x)
+		      (lambda x
 			(if (not (eq? save winders)) (do-wind save))
-			(k x)))))))))
+			(apply k x)))))))))
   (set! call-with-current-continuation call/cc)
   (set! dynamic-wind
 	(lambda (in body out)
@@ -508,14 +508,15 @@
 	   (lambda () ,@cleanup)))))
 
 (define (make-promise p)
-  (let ((val #f) (set? #f))
+  (let ((vals #f) (set? #f))
     (lambda ()
       (if (not set?)
-	  (let ((x (p)))
-	    (if (not set?)
-		(begin (set! val x)
-		       (set! set? #t)))))
-      val)))
+	  (call-with-values p
+	    (lambda x
+	      (if (not set?)
+		  (begin (set! vals x)
+			 (set! set? #t))))))
+      (apply values vals))))
 
 (define (force promise)
   (promise))

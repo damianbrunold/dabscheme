@@ -2133,3 +2133,147 @@ b
 =>
 4
 <<
+
+(values)
+=>
+.
+(values 1)
+=>
+1
+.
+(values 1 2 3)
+=>
+1
+2
+3
+<<
+
+(define head&tail
+  (lambda (ls)
+    (values (car ls) (cdr ls))))
+(head&tail '(a b c))
+=>
+a
+(b c)
+<<
+
+(call-with-values
+    (lambda () (values 'bond 'james))
+  (lambda (x y) (cons y x)))
+=>
+(james . bond)
+<<
+
+(call-with-values values list)
+=>
+()
+<<
+
+(define dxdy
+  (lambda (p1 p2)
+    (values (- (car p2) (car p1))
+	    (- (cdr p2) (cdr p1)))))
+(dxdy '(0 . 0) '(0 . 5))
+=>
+0
+5
+<<
+
+(define dxdy
+  (lambda (p1 p2)
+    (values (- (car p2) (car p1))
+	    (- (cdr p2) (cdr p1)))))
+(define segment-length
+  (lambda (p1 p2)
+    (call-with-values
+	(lambda () (dxdy p1 p2))
+      (lambda (dx dy) (sqrt (+ (* dx dx) (* dy dy)))))))
+(define segment-slope
+  (lambda (p1 p2)
+    (call-with-values
+	(lambda () (dxdy p1 p2))
+      (lambda (dx dy) (/ dy dx)))))
+=
+(segment-length '(1 . 4) '(4 . 8))
+=>
+5
+.
+(segment-slope '(1 . 4) '(4 . 8))
+=>
+1.3333333333333333
+<<
+
+(define dxdy
+  (lambda (p1 p2)
+    (values (- (car p2) (car p1))
+	    (- (cdr p2) (cdr p1)))))
+(define describe-segment
+  (lambda (p1 p2)
+    (call-with-values
+	(lambda () (dxdy p1 p2))
+      (lambda (dx dy)
+	(values
+	 (sqrt (+ (* dx dx) (* dy dy)))
+	 (/ dy dx))))))
+=
+(describe-segment '(1 . 4) '(4 . 8))
+=>
+5
+1.3333333333333333
+<<
+
+(define split
+  (lambda (ls)
+    (if (or (null? ls) (null? (cdr ls)))
+	(values ls '())
+	(call-with-values
+	    (lambda () (split (cddr ls)))
+	  (lambda (odds evens)
+	    (values (cons (car ls) odds)
+		    (cons (cadr ls) evens)))))))
+=
+(split '(a b c d e f))
+=>
+(a c e)
+(b d f)
+<<
+
+(+ (values 2) 4)
+=>
+6
+.
+(if (values #t) 1 2)
+=>
+1
+.
+(call-with-values
+    (lambda () 4)
+  (lambda (x) x))
+=>
+4
+<<
+
+(begin (values 1 2 3) 4)
+=>
+4
+<<
+
+(call-with-values
+    (lambda ()
+      (call/cc (lambda (k) (k 2 3))))
+  (lambda (x y) (list x y)))
+=>
+(2 3)
+<<
+
+(define p (delay (values 1 2 3)))
+(force p)
+=>
+1
+2
+3
+.
+(call-with-values (lambda () (force p)) +)
+=>
+6
+<<
