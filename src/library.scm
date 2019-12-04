@@ -506,3 +506,20 @@
 	   (lambda () #f)
 	   (lambda () ,body)
 	   (lambda () ,@cleanup)))))
+
+(define (make-promise p)
+  (let ((val #f) (set? #f))
+    (lambda ()
+      (if (not set?)
+	  (let ((x (p)))
+	    (if (not set?)
+		(begin (set! val x)
+		       (set! set? #t)))))
+      val)))
+
+(define (force promise)
+  (promise))
+
+(defmacro delay
+  (lambda (expr)
+    `(make-promise (lambda () ,(car expr)))))
