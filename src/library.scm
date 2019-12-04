@@ -399,6 +399,18 @@
       `(call-with-values (lambda () ,expression)
 	 (lambda ,formals ,@body)))))
 
+(defmacro with-values
+  (lambda (expr)
+    `(call-with-values (lambda () ,(car expr)) ,(cadr expr))))
+
+(defmacro let-values
+  (lambda (expr)
+    (let* ((defs (first expr))
+	   (var (caar defs))
+	   (val (cadar defs))
+	   (body (cdr expr)))
+      `(with-values ,val (lambda ,var ,@body)))))
+
 (define (map f ls . more)
   (if (null? more)
       (let map1 ((ls ls))
@@ -524,3 +536,12 @@
 (defmacro delay
   (lambda (expr)
     `(make-promise (lambda () ,(car expr)))))
+
+(define (split ls)
+  (if (or (null? ls) (null? (cdr ls)))
+      (values ls '())
+      (call-with-values
+	  (lambda () (split (cddr ls)))
+	(lambda (odds evens)
+	  (values (cons (car ls) odds)
+		  (cons (cadr ls) evens))))))

@@ -2277,3 +2277,35 @@ a
 =>
 6
 <<
+
+(defmacro first
+  (lambda (expr)
+    `(call-with-values
+	 (lambda () ,(car expr))
+       (lambda (x . y) x))))
+(if (first (values #t #f)) 'a 'b)
+=>
+a
+<<
+
+(with-values (values 1 2) list)
+=>
+(1 2)
+.
+(with-values (split '(1 2 3 4))
+  (lambda (odds evens)
+    evens))
+=>
+(2 4)
+<<
+
+(let-values (((odds evens) (split '(1 2 3 4))))
+  evens)
+=>
+(2 4)
+.
+(let-values ((ls (values 'a 'b 'c)))
+  ls)
+=>
+(a b c)
+<<
