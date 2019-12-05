@@ -17,6 +17,11 @@ public class Scheme {
         rootGlobals = new Globals(globals);
     }
 
+    public Scheme(Globals globals) throws IOException {
+        this.globals = globals;
+        rootGlobals = new Globals(globals);
+    }
+
     public void reset() {
         globals.resetTo(rootGlobals);
     }
@@ -297,13 +302,12 @@ public class Scheme {
         }
     }
 
-    private void loadLibraries() throws IOException {
+    public void loadLibraries() throws IOException {
         evalFile(Scheme.class.getResourceAsStream("/library.scm"));
         evalFile(Scheme.class.getResourceAsStream("/srfi-1.scm"));
     }
 
     public void repl() throws IOException {
-        loadLibraries();
         System.out.print("> ");
         System.out.flush();
         PushbackReader in = new PushbackReader(new InputStreamReader(System.in));

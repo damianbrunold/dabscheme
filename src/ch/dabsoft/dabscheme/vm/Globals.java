@@ -59,6 +59,7 @@ public class Globals {
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());
         bind("call-with-values", getCallWithValues());
+        bind("eval", new PrimitiveEval(this));
     }
 
     private Object getCallCC() {

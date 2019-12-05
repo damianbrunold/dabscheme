@@ -545,3 +545,7 @@
 	(lambda (odds evens)
 	  (values (cons (car ls) odds)
 		  (cons (cadr ls) evens))))))
+
+(define (scheme-report-environment version) (list 'scheme-report version))
+(define (null-environment version) (list 'null version))
+(define (interaction-environment) (list 'interaction))

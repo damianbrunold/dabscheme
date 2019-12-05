@@ -2309,3 +2309,15 @@ a
 =>
 (a b c)
 <<
+
+(define cons 'not-cons)
+(eval '(let ((x 3)) (cons x 4))
+      (scheme-report-environment 5))
+=>
+(3 . 4)
+.
+(define lambda 'not-lambda)
+(eval '(lambda (x) x) (null-environment 5))
+=>
+#<lambda>
+<<
