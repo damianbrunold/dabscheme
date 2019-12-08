@@ -1,5 +1,8 @@
 package ch.dabsoft.dabscheme.vm;
 
+import javax.print.DocFlavor;
+import java.io.PushbackReader;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +12,7 @@ public class Value {
     public static final Pair NIL = new Pair();
     public static final Boolean T = Boolean.TRUE;
     public static final Boolean F = Boolean.FALSE;
+    public static final Byte EOF = 1;
 
     private static Map<String, String> symbols = new HashMap<>();
 
@@ -56,6 +60,8 @@ public class Value {
     public static List<Object> asVector(Object value) {
         return (List<Object>) value;
     }
+    public static PushbackReader asInputPort(Object value) { return (PushbackReader) value; }
+    public static Writer asOutputPort(Object value) { return (Writer) value; }
 
     public static boolean isValues(Object value) { return value instanceof Values; }
     public static boolean isInteger(Object value) {
@@ -88,6 +94,9 @@ public class Value {
     public static boolean isPrimitive(Object value) {
         return value instanceof Primitive;
     }
+    public static boolean isInputPort(Object value) { return value instanceof PushbackReader; }
+    public static boolean isOutputPort(Object value) { return value instanceof Writer; }
+    public static boolean isEOFObject(Object value) { return value instanceof Byte && value == EOF;}
 
     public static boolean isAtom(Object value) { return isConstant(value) || isSymbol(value); }
     public static boolean isConstant(Object value) { return isInteger(value) || isReal(value) || isBoolean(value) || isString(value) || isChar(value); }
@@ -100,6 +109,9 @@ public class Value {
         if (isString(value)) return printRepString(asString(value));
         if (isPair(value)) return printRepPair(asPair(value));
         if (isVector(value)) return printRepVector(asVector(value));
+        if (isInputPort(value)) return "#<input-port>";
+        if (isOutputPort(value)) return "#<output-port>";
+        if (isEOFObject(value)) return "#<eof>";
         return value.toString(); // TODO
     }
 
@@ -171,4 +183,5 @@ public class Value {
     public static String displayRep(Object value) {
         return value.toString(); // TODO
     }
+
 }

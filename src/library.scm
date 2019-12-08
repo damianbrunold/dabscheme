@@ -67,6 +67,12 @@
       (- n)
       n))
 
+(define (current-input-port)
+  *input-port*)
+
+(define (current-output-port)
+  *output-port*)
+
 ; this is not tail recursive, will be replaced as soon as named-let is available
 (define (length x)
   (if (null? x)
@@ -567,3 +573,17 @@
 (define (scheme-report-environment version) (list 'scheme-report version))
 (define (null-environment version) (list 'null version))
 (define (interaction-environment) (list 'interaction))
+
+(define (call-with-input-file filename proc)
+  (let ((p (open-input-file filename)))
+    (let ((v (proc p)))
+      (close-input-port p)
+      v)))
+
+(define (with-input-from-file filename thunk)
+  (let ((p (open-input-file filename))
+	(orig-input-port *input-port*))
+    (dynamic-wind
+	(lambda () (set! *input-port* p))
+	(lambda () (thunk))
+	(lambda () (set! *input-port* orig-input-port) (close-input-port p)))))

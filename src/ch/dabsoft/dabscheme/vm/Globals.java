@@ -2,6 +2,9 @@ package ch.dabsoft.dabscheme.vm;
 
 import ch.dabsoft.dabscheme.primitive.*;
 
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +19,8 @@ public class Globals {
     }
 
     public Globals() {
+        bind("*input-port*", new PushbackReader(new InputStreamReader(System.in)));
+        bind("*output-port*", new OutputStreamWriter(System.out));
         bind("nil", Value.NIL);
         bind("+", new PrimitiveAdd());
         bind("*", new PrimitiveMul());
@@ -59,6 +64,15 @@ public class Globals {
         bind("quotient", new PrimitiveQuotient());
         bind("error", new PrimitiveError());
         bind("exact?", new PrimitiveExactP());
+        bind("input-port?", new PrimitiveInputPortP());
+        bind("output-port?", new PrimitiveOutputPortP());
+        bind("open-input-file", new PrimitiveOpenInputFile());
+        bind("close-input-port", new PrimitiveCloseInputPort());
+        bind("close-output-port", new PrimitiveCloseOutputPort());
+        bind("read-char", new PrimitiveReadChar(this));
+        bind("peek-char", new PrimitivePeekChar(this));
+        bind("char-ready?", new PrimitiveCharReadyP(this));
+        bind("eof-object?", new PrimitiveEOFObjectP());
         bind("values", new PrimitiveValues());
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());
