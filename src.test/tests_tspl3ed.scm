@@ -2553,3 +2553,443 @@ cons
 =>
 #f
 <<
+
+(eqv? 'a 3)
+=>
+#f
+.
+(eqv? #t 't)
+=>
+#f
+.
+(eqv? "abc" 'abc)
+=>
+#f
+.
+(eqv? "hi" '(hi))
+=>
+#f
+.
+(eqv? #f '())
+=>
+#f
+.
+(eqv? 9 7)
+=>
+#f
+.
+(eqv? 4.5 4.0)
+=>
+#f
+.
+(eqv? 3 3.0)
+=>
+#f
+.
+(eqv? 3.4 53344)
+=>
+#f
+.
+(eqv? 4.5 4.5)
+=>
+#t
+.
+(eqv? 3 3)
+=>
+#t
+.
+(eqv? 3.4 (+ 3.0 0.4))
+=>
+#t
+.
+(let ((x (* 1234567 2)))
+  (eqv? x x))
+=>
+#t
+<<
+
+(eqv? #\a #\b)
+=>
+#f
+.
+(eqv? #\a #\a)
+=>
+#t
+.
+(let ((x (string-ref "hi" 0)))
+  (eqv? x x))
+=>
+#t
+<<
+
+(eqv? #t #t)
+=>
+#t
+.
+(eqv? #f #f)
+=>
+#t
+.
+(eqv? #t #f)
+=>
+#f
+.
+(eqv? (null? '()) #t)
+=>
+#t
+.
+(eqv? (null? '(a)) #f)
+=>
+#t
+<<
+
+(eqv? (cdr '(a)) '())
+=>
+#t
+<<
+
+(eqv? 'a 'a)
+=>
+#t
+.
+(eqv? 'a 'b)
+=>
+#f
+.
+(eqv? 'a (string->symbol "a"))
+=>
+#t
+<<
+
+(eqv? '(a) '(b))
+=>
+#f
+.
+(let ((x '(a . b))) (eqv? x x))
+=>
+#t
+.
+(let ((x (cons 'a 'b)))
+  (eqv? x x))
+=>
+#t
+.
+(eqv? (cons 'a 'b) (cons 'a 'b))
+=>
+#f
+<<
+
+(eqv? "abc" "cba")
+=>
+#f
+.
+(let ((x "hi")) (eqv? x x))
+=>
+#t
+.
+(let ((x (string #\h #\i))) (eqv? x x))
+=>
+#t
+.
+(eqv? (string #\h #\i)
+      (string #\h #\i))
+=>
+#f
+<<
+
+(eqv? '#(a) '#(b))
+=>
+#f
+.
+(let ((x '#(a))) (eqv? x x))
+=>
+#t
+.
+(let ((x (vector 'a)))
+  (eqv? x x))
+=>
+#t
+.
+(eqv? (vector 'a) (vector 'a))
+=>
+#f
+<<
+
+(eqv? car car)
+=>
+#t
+.
+(eqv? car cdr)
+=>
+#f
+.
+(let ((f (lambda (x) x)))
+  (eqv? f f))
+=>
+#t
+<<
+
+(let ((f (lambda (x)
+	   (lambda ()
+	     (set! x (+ x 1))
+	     x))))
+  (eqv? (f 0) (f 0)))
+=>
+#f
+<<
+
+(equal? 'a 3)
+=>
+#f
+.
+(equal? #t 't)
+=>
+#f
+.
+(equal? "abc" 'abc)
+=>
+#f
+.
+(equal? "hi" '(hi))
+=>
+#f
+.
+(equal? #f '())
+=>
+#f
+<<
+
+(equal? 9 7)
+=>
+#f
+.
+(equal? 4.5 4.0)
+=>
+#f
+.
+(equal? 3 3.0)
+=>
+#f
+.
+(equal? 3.4 53344)
+=>
+#f
+.
+(equal? 4.5 4.5)
+=>
+#t
+.
+(equal? 3 3)
+=>
+#t
+.
+(equal? 3.4 (+ 3.0 0.4))
+=>
+#t
+.
+(let ((x (* 1234567 2)))
+  (equal? x x))
+=>
+#t
+<<
+
+(equal? #\a #\b)
+=>
+#f
+.
+(equal? #\a #\a)
+=>
+#t
+.
+(let ((x (string-ref "hi" 0)))
+  (equal? x x))
+=>
+#t
+<<
+
+(equal? #t #t)
+=>
+#t
+.
+(equal? #f #f)
+=>
+#t
+.
+(equal? #t #f)
+=>
+#f
+.
+(equal? (null? '()) #t)
+=>
+#t
+.
+(equal? (null? '(a)) #f)
+=>
+#t
+<<
+
+(equal? (cdr '(a)) '())
+=>
+#t
+<<
+
+(equal? 'a 'a)
+=>
+#t
+.
+(equal? 'a 'b)
+=>
+#f
+.
+(equal? 'a (string->symbol "a"))
+=>
+#t
+<<
+
+(equal? '(a) '(b))
+=>
+#f
+.
+(equal? '(a) '(a))
+=>
+#t
+.
+(let ((x '(a . b))) (equal? x x))
+=>
+#t
+.
+(let ((x (cons 'a 'b)))
+  (equal? x x))
+=>
+#t
+.
+(equal? (cons 'a 'b) (cons 'a 'b))
+=>
+#t
+<<
+
+(equal? "abc" "cba")
+=>
+#f
+.
+(equal? "abc" "abc")
+=>
+#t
+.
+(let ((x "hi")) (equal? x x))
+=>
+#t
+.
+(let ((x (string #\h #\i))) (equal? x x))
+=>
+#t
+.
+(equal? (string #\h #\i)
+      (string #\h #\i))
+=>
+#t
+<<
+
+(equal? '#(a) '#(b))
+=>
+#f
+.
+(equal? '#(a) '#(a))
+=>
+#t
+.
+(let ((x '#(a))) (equal? x x))
+=>
+#t
+.
+(let ((x (vector 'a)))
+  (equal? x x))
+=>
+#t
+.
+(equal? (vector 'a) (vector 'a))
+=>
+#t
+<<
+
+(equal? car car)
+=>
+#t
+.
+(equal? car cdr)
+=>
+#f
+.
+(let ((f (lambda (x) x)))
+  (equal? f f))
+=>
+#t
+<<
+
+(let ((f (lambda (x)
+	   (lambda ()
+	     (set! x (+ x 1))
+	     x))))
+  (equal? (f 0) (f 0)))
+=>
+#f
+<<
+
+(boolean? #t)
+=>
+#t
+.
+(boolean? #f)
+=>
+#t
+.
+(boolean? 't)
+=>
+#f
+.
+(boolean? '())
+=>
+#f
+<<
+
+(null? '())
+=>
+#t
+.
+(null? '(a))
+=>
+#f
+.
+(null? (cdr '(a)))
+=>
+#t
+.
+(null? 3)
+=>
+#f
+.
+(null? #f)
+=>
+#f
+<<
+
+(pair? '(a b c))
+=>
+#t
+.
+(pair? '(3 . 4))
+=>
+#t
+.
+(pair? '())
+=>
+#f
+.
+(pair? '#(a b))
+=>
+#f
+.
+(pair? 3)
+=>
+#f
+<<

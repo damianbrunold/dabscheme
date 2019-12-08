@@ -219,11 +219,17 @@
 	      ((not (char=? (string-ref a n) (string-ref b n))) #f)
 	      (else (loop (+ n 1)))))))
 
+(define (inexact? n)
+  (not (exact? n)))
+
 (define (eqv? x y)
   (cond
    ((eq? x y))
    ((number? x)
-    (and (number? y) (= x y))) ; TODO handle exact/inexact
+    (and (number? y)
+	 (if (exact? x)
+	     (and (exact? y) (= x y))
+	     (and (inexact? y) (= x y)))))
    ((char? x) (and (char? y) (char=? x y)))
    (else #f)))
 
@@ -234,10 +240,15 @@
     (and (pair? y)
 	 (equal? (car x) (car y))
 	 (equal? (cdr x) (cdr y))))
-   ((string? x)
-    (and (string? y)
-         (string=? x y)))
-	; TODO handle vectors
+   ((string? x) (and (string? y) (string=? x y)))
+   ((vector? x)
+    (and (vector? y)
+	 (let ((n (vector-length x)))
+	   (and (= (vector-length y) n)
+		(let loop ((i 0))
+		  (or (= i n)
+		      (and (equal? (vector-ref x i) (vector-ref y i))
+			   (loop (+ i 1)))))))))
    (else #f)))
 
 (define (memq x ls)

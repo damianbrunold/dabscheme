@@ -57,6 +57,7 @@ public class Globals {
         bind("char=?", new PrimitiveCharEqP());
         bind("quotient", new PrimitiveQuotient());
         bind("error", new PrimitiveError());
+        bind("exact?", new PrimitiveExactP());
         bind("values", new PrimitiveValues());
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());
