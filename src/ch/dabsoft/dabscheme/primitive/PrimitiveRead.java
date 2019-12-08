@@ -204,7 +204,7 @@ public class PrimitiveRead extends Primitive {
     }
 
     public Object read(Token token, PushbackReader in) throws IOException {
-        if (token == null) return null;
+        if (token == null) return Value.EOF;
         if (token.type == TokenType.INTEGER) {
             return Long.parseLong(token.value);
         } else if (token.type == TokenType.REAL) {

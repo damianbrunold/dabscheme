@@ -73,7 +73,7 @@ public class Scheme {
             PushbackReader in = new PushbackReader(reader);
             Object expr = read(in);
             Object value = Value.F;
-            while (expr != null) {
+            while (expr != Value.EOF) {
                 try {
                     value = eval(expr);
                 } catch (Exception e) {
@@ -84,7 +84,7 @@ public class Scheme {
             return value;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Value.F;
+            return new Values();
         }
     }
 
@@ -98,6 +98,7 @@ public class Scheme {
         PushbackReader in = new PushbackReader(new InputStreamReader(System.in));
         Object expr = read(in);
         while (true) {
+            if (expr == Value.EOF) break;
             try {
                 Object value = eval(expr);
                 System.out.println(Value.printRep(value));
