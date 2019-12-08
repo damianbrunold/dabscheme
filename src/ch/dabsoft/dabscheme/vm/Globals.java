@@ -50,8 +50,10 @@ public class Globals {
         bind("vector-ref", new PrimitiveVectorRef());
         bind("vector", new PrimitiveVector());
         bind("vector-set!", new PrimitiveVectorSetB());
+        bind("string", new PrimitiveString());
         bind("string-length", new PrimitiveStringLength());
         bind("string-ref", new PrimitiveStringRef());
+        bind("string->symbol", new PrimitiveStringToSymbol());
         bind("char=?", new PrimitiveCharEqP());
         bind("quotient", new PrimitiveQuotient());
         bind("error", new PrimitiveError());

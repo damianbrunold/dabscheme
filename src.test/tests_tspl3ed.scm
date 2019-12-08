@@ -2321,3 +2321,235 @@ a
 =>
 #<lambda>
 <<
+
+3.2
+=>
+3.2
+.
+#f
+=>
+#f
+.
+#\c
+=>
+#\c
+.
+"hi"
+=>
+"hi"
+<<
+
+(+ 2 3)
+=>
+5
+.
+'(+ 2 3)
+=>
+(+ 2 3)
+.
+(quote (+ 2 3))
+=>
+(+ 2 3)
+.
+'a
+=>
+a
+.
+'cons
+=>
+cons
+.
+'()
+=>
+()
+.
+'7
+=>
+7
+<<
+
+`(+ 2 3)
+=>
+(+ 2 3)
+.
+`(+ 2 ,(* 3 4))
+=>
+(+ 2 12)
+.
+`(a b (,(+ 2 3) c) d)
+=>
+(a b (5 c) d)
+.
+`(a b ,(reverse '(c d e)) f g)
+=>
+(a b (e d c) f g)
+.
+(let ((a 1) (b 2))
+  `(,a . ,b))
+=>
+(1 . 2)
+.
+`(+ ,@(cdr ' (* 2 3)))
+=>
+(+ 2 3)
+.
+`(a b ,@(reverse '(c d e)) f g)
+=>
+(a b e d c f g)
+.
+;(let ((a 1) (b 2))
+;  `(,a ,@b))
+;=>
+;(1 . 2)
+;.
+`#(,@(list 1 2 3))
+=>
+#(1 2 3)
+.
+'`,(cons 'a 'b)
+=>
+`,(cons 'a 'b)
+.
+`',(cons 'a 'b)
+=>
+'(a . b)
+<<
+
+(eq? 'a 3)
+=>
+#f
+.
+(eq? #t 't)
+=>
+#f
+.
+(eq? "abc" 'abc)
+=>
+#f
+.
+(eq? "hi" '(hi))
+=>
+#f
+.
+(eq? #f '())
+=>
+#f
+<<
+
+(eq? #\a #\b)
+=>
+#f
+.
+<<
+
+(eq? #t #t)
+=>
+#t
+.
+(eq? #f #f)
+=>
+#t
+.
+(eq? #t #f)
+=>
+#f
+.
+(eq? (null? '()) #t)
+=>
+#t
+.
+(eq? (null? '(a)) #f)
+=>
+#t
+<<
+
+(eq? (cdr '(a)) '())
+=>
+#t
+<<
+
+(eq? 'a 'a)
+=>
+#t
+.
+(eq? 'a 'b)
+=>
+#f
+.
+(eq? 'a (string->symbol "a"))
+=>
+#t
+<<
+
+(eq? '(a) '(b))
+=>
+#f
+.
+(let ((x '(a . b)))
+  (eq? x x))
+=>
+#t
+.
+(eq? (cons 'a 'b) (cons 'a 'b))
+=>
+#f
+<<
+
+(eq? "abc" "cba")
+=>
+#f
+.
+(let ((x "hi")) (eq? x x))
+=>
+#t
+.
+(let ((x (string #\h #\i))) (eq? x x))
+=>
+#t
+.
+(eq? (string #\h #\i)
+     (string #\h #\i))
+=>
+#f
+<<
+
+(eq? '#(a) '#(b))
+=>
+#f
+.
+(let ((x '#(a))) (eq? x x))
+=>
+#t
+.
+(let ((x (vector 'a)))
+  (eq? x x))
+=>
+#t
+.
+(eq? (vector 'a) (vector 'a))
+=>
+#f
+<<
+
+(eq? car car)
+=>
+#t
+.
+(eq? car cdr)
+=>
+#f
+.
+(let ((f (lambda (x) x)))
+  (eq? f f))
+=>
+#t
+<<
+
+(let ((f (lambda (x)
+	   (lambda ()
+	     (set! x (+ x 1))
+	     x))))
+  (eq? (f 0) (f 0)))
+=>
+#f
+<<
