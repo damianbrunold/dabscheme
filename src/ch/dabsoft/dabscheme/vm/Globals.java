@@ -73,6 +73,10 @@ public class Globals {
         bind("peek-char", new PrimitivePeekChar(this));
         bind("char-ready?", new PrimitiveCharReadyP(this));
         bind("eof-object?", new PrimitiveEOFObjectP());
+        bind("write-char", new PrimitiveWriteChar(this));
+        bind("write", new PrimitiveWrite(this));
+        bind("display", new PrimitiveDisplay(this));
+        bind("newline", new PrimitiveNewline(this));
         bind("values", new PrimitiveValues());
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());

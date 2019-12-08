@@ -3464,3 +3464,13 @@ d
 <<
 
 	     
+(input-port? (current-input-port))
+=>
+#t
+<<
+
+(output-port? (current-output-port))
+=>
+#t
+<<
+

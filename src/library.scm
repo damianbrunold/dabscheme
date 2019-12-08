@@ -587,3 +587,17 @@
 	(lambda () (set! *input-port* p))
 	(lambda () (thunk))
 	(lambda () (set! *input-port* orig-input-port) (close-input-port p)))))
+
+(define (call-with-output-file filename proc)
+  (let ((p (open-output-file filename)))
+    (let ((v (proc p)))
+      (close-output-port p)
+      v)))
+
+(define (with-output-to-file filename thunk)
+  (let ((p (open-output-file filename))
+	(orig-output-port *output-port*))
+    (dynamic-wind
+	(lambda () (set! *output-port* p))
+	(lambda () (thunk))
+	(lambda () (set! *output-port* orig-output-port) (close-output-port p)))))

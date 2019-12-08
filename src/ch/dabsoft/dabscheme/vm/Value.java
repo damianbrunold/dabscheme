@@ -181,7 +181,65 @@ public class Value {
     }
 
     public static String displayRep(Object value) {
+        if (isValues(value)) return displayRepValues(asValues(value));
+        if (isInteger(value) || isReal(value) || isSymbol(value)) return value.toString();
+        if (isBoolean(value)) return asBoolean(value) ? "#t" : "#f";
+        if (isChar(value)) return value.toString();
+        if (isString(value)) return new String(asString(value));
+        if (isPair(value)) return displayRepPair(asPair(value));
+        if (isVector(value)) return displayRepVector(asVector(value));
+        if (isInputPort(value)) return "#<input-port>";
+        if (isOutputPort(value)) return "#<output-port>";
+        if (isEOFObject(value)) return "#<eof>";
         return value.toString(); // TODO
+    }
+
+    private static String displayRepVector(List<Object> elements) {
+        StringBuilder result = new StringBuilder("#(");
+        for (Object obj : elements) {
+            result.append(displayRep(obj)).append(' ');
+        }
+        if (result.charAt(result.length() - 1) == ' ') result.setCharAt(result.length() - 1, ')');
+        else result.append(')');
+        return result.toString();
+    }
+
+    private static String displayRepPair(Pair pair) {
+        if (pair.car == null && pair.cdr == null) return "()";
+        if (Value.isSymbol(pair.car) && Value.asSymbol(pair.car).equals("quote")) {
+            return "'" + displayRep(Value.asPair(pair.cdr).car);
+        } else if (Value.isSymbol(pair.car) && Value.asSymbol(pair.car).equals("quasiquote")) {
+            return "`" + displayRep(Value.asPair(pair.cdr).car);
+        } else if (Value.isSymbol(pair.car) && Value.asSymbol(pair.car).equals("unquote")) {
+            return "," + displayRep(Value.asPair(pair.cdr).car);
+        } else if (Value.isSymbol(pair.car) && Value.asSymbol(pair.car).equals("unquote-splicing")) {
+            return ",@" + displayRep(Value.asPair(pair.cdr).car);
+        }
+        StringBuilder result = new StringBuilder("(");
+        Pair current = pair;
+        while (true) {
+            result.append(displayRep(current.car));
+            if (!Value.isPair(current.cdr)) {
+                result.append(" . ").append(displayRep(current.cdr)).append(")");
+                break;
+            } else if (current.cdr == Value.NIL) {
+                result.append(")");
+                break;
+            } else {
+                result.append(" ");
+            }
+            current = Value.asPair(current.cdr);
+        }
+        return result.toString();
+    }
+
+    private static String displayRepValues(Values values) {
+        StringBuilder result = new StringBuilder();
+        for (Object value : values.values) {
+            result.append(displayRep(value)).append("\n");
+        }
+        if (result.length() > 0) result.setLength(result.length() - 1);
+        return result.toString();
     }
 
 }
