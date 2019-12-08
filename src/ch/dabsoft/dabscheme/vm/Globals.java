@@ -67,7 +67,11 @@ public class Globals {
         bind("input-port?", new PrimitiveInputPortP());
         bind("output-port?", new PrimitiveOutputPortP());
         bind("open-input-file", new PrimitiveOpenInputFile());
+        bind("open-input-string", new PrimitiveOpenInputString());
         bind("close-input-port", new PrimitiveCloseInputPort());
+        bind("open-output-file", new PrimitiveOpenOutputFile());
+        bind("open-output-string", new PrimitiveOpenOutputString());
+        bind("get-output-string", new PrimitiveGetOutputString());
         bind("close-output-port", new PrimitiveCloseOutputPort());
         bind("read-char", new PrimitiveReadChar(this));
         bind("peek-char", new PrimitivePeekChar(this));
