@@ -72,6 +72,9 @@ public class Globals {
         bind("read-char", new PrimitiveReadChar(this));
         bind("peek-char", new PrimitivePeekChar(this));
         bind("char-ready?", new PrimitiveCharReadyP(this));
+        bind("read-line", new PrimitiveReadLine(this));
+        bind("read", new PrimitiveRead(this));
+        bind("load", new PrimitiveLoad(this));
         bind("eof-object?", new PrimitiveEOFObjectP());
         bind("write-char", new PrimitiveWriteChar(this));
         bind("write", new PrimitiveWrite(this));
@@ -82,6 +85,7 @@ public class Globals {
         bind("apply", getApply());
         bind("call-with-values", getCallWithValues());
         bind("eval", new PrimitiveEval(this));
+        bind("exit", new PrimitiveExit());
     }
 
     private Object getCallCC() {
