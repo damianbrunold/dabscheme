@@ -54,6 +54,7 @@ public class Globals {
         bind("string-length", new PrimitiveStringLength());
         bind("string-ref", new PrimitiveStringRef());
         bind("string->symbol", new PrimitiveStringToSymbol());
+        bind("make-string", new PrimitiveMakeString());
         bind("char=?", new PrimitiveCharEqP());
         bind("quotient", new PrimitiveQuotient());
         bind("error", new PrimitiveError());

@@ -145,6 +145,8 @@
 		    (list (list var (first expr)))
 		    (list 'if var var (append (list 'or) (cdr expr)))))))))
 
+(define complex? real?)
+(define rational? integer?)
 (define (number? n) (or (integer? n) (real? n)))
 (define (procedure? obj) (or (lambda? obj) (primitive? obj)))
 
@@ -186,6 +188,11 @@
 			(null? h)))
 		  (null? h)))))
     (race x x)))
+
+(define (list-ref ls n)
+  (if (= n 0)
+      (car ls)
+      (list-ref (cdr ls) (- n 1))))
 
 (defmacro cond
   (lambda (expr)

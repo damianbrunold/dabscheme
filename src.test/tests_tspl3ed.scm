@@ -2993,3 +2993,474 @@ cons
 =>
 #f
 <<
+
+(integer? 1901)
+=>
+#t
+.
+(rational? 1901)
+=>
+#t
+.
+(real? 1901)
+=>
+#t
+.
+(complex? 1901)
+=>
+#t
+.
+(number? 1901)
+=>
+#t
+<<
+
+(integer? -3.0)
+=>
+#t
+.
+(rational? -3.0)
+=>
+#t
+.
+(real? -3.0)
+=>
+#t
+.
+(complex? -3.0)
+=>
+#t
+.
+(number? -3.0)
+=>
+#t
+<<
+
+(integer? -2.345)
+=>
+#f
+.
+; since for us rationals == integers, the following is false
+(rational? -2.345)
+=>
+#f
+.
+(real? -2.345)
+=>
+#t
+.
+(complex? -2.345)
+=>
+#t
+.
+(number? -2.345)
+=>
+#t
+<<
+
+(integer? 'a)
+=>
+#f
+.
+(rational? '(a b c))
+=>
+#f
+.
+(real? "3")
+=>
+#f
+.
+(complex? #(1 2))
+=>
+#f
+.
+(number? #\a)
+=>
+#f
+<<
+
+(char? 'a)
+=>
+#f
+.
+(char? 97)
+=>
+#f
+.
+(char? #\a)
+=>
+#t
+.
+(char? "a")
+=>
+#f
+.
+(char? (string-ref (make-string 1) 0))
+=>
+#t
+<<
+
+(string? "hi")
+=>
+#t
+.
+(string? 'hi)
+=>
+#f
+.
+(string? #\h)
+=>
+#f
+<<
+
+(vector? '#())
+=>
+#t
+.
+(vector? '#(a b c))
+=>
+#t
+.
+(vector? (vector 'a 'b 'c))
+=>
+#t
+.
+(vector? '())
+=>
+#f
+.
+(vector? '(a b c))
+=>
+#f
+.
+(vector? "abc")
+=>
+#f
+<<
+
+(symbol? 't)
+=>
+#t
+.
+(symbol? "t")
+=>
+#f
+.
+(symbol? '(t))
+=>
+#f
+.
+(symbol? #\t)
+=>
+#f
+.
+(symbol? 3)
+=>
+#f
+.
+(symbol? #t)
+=>
+#f
+<<
+
+(procedure? car)
+=>
+#t
+.
+(procedure? 'car)
+=>
+#f
+.
+(procedure? (lambda (x) x))
+=>
+#t
+.
+(procedure? '(lambda (x) x))
+=>
+#f
+.
+(call/cc procedure?)
+=>
+#t
+<<
+
+(cons 'a '())
+=>
+(a)
+.
+(cons 'a '(b c))
+=>
+(a b c)
+.
+(cons 3 4)
+=>
+(3 . 4)
+<<
+
+(car '(a))
+=>
+a
+.
+(car '(a b c))
+=>
+a
+.
+(car (cons 3 4))
+=>
+3
+<<
+
+(cdr '(a))
+=>
+()
+.
+(cdr '(a b c))
+=>
+(b c)
+.
+(cdr (cons 3 4))
+=>
+4
+<<
+
+(let ((x '(a b c)))
+  (set-car! x 1)
+  x)
+=>
+(1 b c)
+<<
+
+(let ((x '(a b c)))
+  (set-cdr! x 1)
+  x)
+=>
+(a . 1)
+<<
+
+(caar '((a)))
+=>
+a
+.
+(cadr '(a b c))
+=>
+b
+.
+(cdddr '(a b c d))
+=>
+(d)
+.
+(cadadr '(a (b c)))
+=>
+c
+<<
+
+(list)
+=>
+()
+.
+(list 1 2 3)
+=>
+(1 2 3)
+.
+(list 3 2 1)
+=>
+(3 2 1)
+<<
+
+(list? '())
+=>
+#t
+.
+(list? '(a b c))
+=>
+#t
+.
+(list? 'a)
+=>
+#f
+.
+(list? '(3 . 4))
+=>
+#f
+.
+(list? 3)
+=>
+#f
+.
+(let ((x (list 'a 'b 'c)))
+  (set-cdr! (cddr x) x)
+  (list? x))
+=>
+#f
+<<
+
+(length '())
+=>
+0
+.
+(length '(a b c))
+=>
+3
+<<
+
+(list-ref '(a b c) 0)
+=>
+a
+.
+(list-ref '(a b c) 1)
+=>
+b
+.
+(list-ref '(a b c) 2)
+=>
+c
+<<
+
+(list-tail '(a b c) 0)
+=>
+(a b c)
+.
+(list-tail '(a b c) 2)
+=>
+(c)
+.
+(list-tail '(a b c) 3)
+=>
+()
+.
+(list-tail '(a b c . d) 2)
+=>
+(c . d)
+.
+(list-tail '(a b c . d) 3)
+=>
+d
+.
+(let ((x (list 1 2 3)))
+  (eq? (list-tail x 2)
+       (cddr x)))
+=>
+#t
+<<
+
+(append '(a b c) '())
+=>
+(a b c)
+.
+(append '() '(a b c))
+=>
+(a b c)
+.
+(append '(a b) '(c d))
+=>
+(a b c d)
+.
+(append '(a b) 'c)
+=>
+(a b . c)
+.
+(let ((x (list 'b)))
+  (eq? x (cdr (append '(a) x))))
+=>
+#t
+<<
+
+(reverse '())
+=>
+()
+.
+(reverse '(a b c))
+=>
+(c b a)
+<<
+
+(memq 'a '(b c a d e))
+=>
+(a d e)
+.
+(memq 'a '(b c d e g))
+=>
+#f
+.
+(memq 'a '(b a c a d a))
+=>
+(a c a d a)
+<<
+
+(memv 3.4 '(1.2 2.3 3.4 4.5))
+=>
+(3.4 4.5)
+.
+(memv 3.4 '(1.3 2.5 3.7 4.9))
+=>
+#f
+.
+(let ((ls (list 'a 'b 'c)))
+  (set-car! (memv 'b ls) 'z)
+  ls)
+=>
+(a z c)
+<<
+
+(member '(b) '((a) (b) (c)))
+=>
+((b) (c))
+.
+(member '(d) '((a) (b) (c)))
+=>
+#f
+.
+(member "b" '("a" "b" "c"))
+=>
+("b" "c")
+<<
+
+(define (count-occurrences x ls)
+  (cond
+   ((memq x ls) => (lambda (ls) (+ (count-occurrences x (cdr ls)) 1)))
+   (else 0)))
+=
+(count-occurrences 'a '(a b c d a))
+=>
+2
+<<
+
+(assq 'b '((a . 1) (b . 2)))
+=>
+(b . 2)
+.
+(cdr (assq 'b '((a . 1) (b . 2))))
+=>
+2
+.
+(assq 'c '((a . 1) (b . 2)))
+=>
+#f
+<<
+
+(assv 2.3 '((1.3 . 1) (2.3 . 2)))
+=>
+(2.3 . 2)
+.
+(assv 2.3 '((1.3 a) (3.4 . b)))
+=>
+#f
+<<
+
+(assoc '(a) '(((a) . a) (-1 . b)))
+=>
+((a) . a)
+.
+(assoc '(a) '(((b) . b) (a . c)))
+=>
+#f
+<<
+
+(let ((alist '((2 . a) (3 . b))))
+  (set-cdr! (assv 3 alist) 'c)
+  alist)
+=>
+((2 . a) (3 . c))
+<<
+
+	     
