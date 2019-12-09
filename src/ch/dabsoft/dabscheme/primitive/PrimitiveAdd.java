@@ -7,6 +7,7 @@ public class PrimitiveAdd extends Primitive {
 
     @Override
     public Object apply(Object[] arguments) {
+        if (arguments.length == 0) return 0;
         if (allIntegers(arguments)) {
             long result = Value.asInteger(arguments[0]);
             for (int i = 1; i < arguments.length; i++) result += Value.asInteger(arguments[i]);

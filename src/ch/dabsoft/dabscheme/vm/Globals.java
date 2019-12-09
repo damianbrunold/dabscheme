@@ -62,6 +62,13 @@ public class Globals {
         bind("make-string", new PrimitiveMakeString());
         bind("char=?", new PrimitiveCharEqP());
         bind("quotient", new PrimitiveQuotient());
+        bind("remainder", new PrimitiveRemainder());
+        bind("modulo", new PrimitiveModulo());
+        bind("truncate", new PrimitiveTruncate());
+        bind("floor", new PrimitiveFloor());
+        bind("ceiling", new PrimitiveCeiling());
+        bind("round", new PrimitiveRound());
+        bind("expt", new PrimitiveExpt());
         bind("error", new PrimitiveError());
         bind("exact?", new PrimitiveExactP());
         bind("input-port?", new PrimitiveInputPortP());

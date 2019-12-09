@@ -156,6 +156,9 @@
 (define (number? n) (or (integer? n) (real? n)))
 (define (procedure? obj) (or (lambda? obj) (primitive? obj)))
 
+(define (positive? num) (> num 0))
+(define (negative? num) (< num 0))
+
 (define (macro? obj)
   (and (pair? obj)
        (eq? (car obj) 'macro)
@@ -601,3 +604,27 @@
 	(lambda () (set! *output-port* p))
 	(lambda () (thunk))
 	(lambda () (set! *output-port* orig-output-port) (close-output-port p)))))
+
+(define (gcd . ls)
+  (let ((gcd2 (lambda (a b)
+		(let loop ((a a) (b b))
+		  (cond
+		   ((= b 0) a)
+		   (else (loop b (modulo a b))))))))
+    (if (= (length ls) 2)
+	(apply gcd2 ls)
+	(let loop ((ls ls) (g 0))
+	  (if (null? ls)
+	      g
+	      (loop (cdr ls) (gcd2 (car ls) g)))))))
+
+(define (lcm . ls)
+  (let ((lcm2 (lambda (a b)
+		(abs (/ (* a b) (gcd a b))))))
+    (if (= (length ls) 2)
+	(apply lcm2 ls)
+	(let loop ((ls ls) (r 1))
+	  (if (null? ls)
+	      r
+	      (loop (cdr ls) (lcm2 (car ls) r)))))))
+
