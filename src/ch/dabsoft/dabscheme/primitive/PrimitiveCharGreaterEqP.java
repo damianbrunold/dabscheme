@@ -3,15 +3,15 @@ package ch.dabsoft.dabscheme.primitive;
 import ch.dabsoft.dabscheme.vm.Primitive;
 import ch.dabsoft.dabscheme.vm.Value;
 
-public class PrimitiveCharEqP extends Primitive {
+public class PrimitiveCharGreaterEqP extends Primitive {
 
     @Override
     public Object apply(Object[] arguments) {
-        if (arguments.length < 2) throw new IllegalStateException("char=? expected at least 2 arguments, but got " + arguments.length);
+        if (arguments.length < 2) throw new IllegalStateException("char>=? expected at least 2 arguments, but got " + arguments.length);
         Object current = arguments[0];
         for (int i = 1; i < arguments.length; i++) {
             Object next = arguments[i];
-            if (!(Value.asChar(current).charValue() == Value.asChar(next).charValue())) return false;
+            if (!(Value.asChar(current) >= Value.asChar(next))) return false;
             current = next;
         }
         return true;
@@ -19,7 +19,7 @@ public class PrimitiveCharEqP extends Primitive {
 
     @Override
     public String toString() {
-        return "#<primitive:char=?>";
+        return "#<primitive:char>=?>";
     }
 
 }

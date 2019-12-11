@@ -3945,3 +3945,300 @@ d
 #t
 <<
 
+(exact->inexact 3)
+=>
+3.0
+.
+(exact->inexact 3.0)
+=>
+3.0
+<<
+
+(inexact->exact 3)
+=>
+3
+.
+(inexact->exact 3.0)
+=>
+3
+<<
+
+(magnitude 1)
+=>
+1
+.
+(magnitude -0.093)
+=>
+0.093
+<<
+
+(sqrt 16)
+=>
+4
+.
+(sqrt 4.84)
+=>
+2.2
+<<
+
+(exp 0.0)
+=>
+1.0
+.
+(exp 1.0)
+=>
+2.718281828459045
+.
+(exp -.5)
+=>
+0.6065306597126334
+<<
+
+(log 1.0)
+=>
+0.0
+.
+(log (exp 1.0))
+=>
+1.0
+.
+(/ (log 100) (log 10))
+=>
+2.0
+<<
+
+(string->number "0")
+=>
+0
+.
+(string->number "3.4e3")
+=>
+3400.0
+.
+(string->number "#x#e-2e2")
+=>
+-738
+.
+(string->number "#e-2e2" 16)
+=>
+-738
+.
+(string->number "10" 16)
+=>
+16
+<<
+
+(number->string 3.4)
+=>
+"3.4"
+.
+(number->string 100)
+=>
+"100"
+.
+(number->string 220 16)
+=>
+"dc"
+<<
+
+(char>? #\a #\b)
+=>
+#f
+.
+(char<? #\a #\b)
+=>
+#t
+.
+(char<? #\a #\b #\c)
+=>
+#t
+.
+(char<? #\a #\b #\b)
+=>
+#f
+.
+(let ((c #\r))
+  (char<=? #\a c #\z))
+=>
+#t
+.
+(char<=? #\Z #\W)
+=>
+#f
+.
+(char=? #\+ #\+)
+=>
+#t
+.
+(or (char<? #\a #\0)
+    (char<? #\0 #\a))
+=>
+#t
+<<
+
+(char-ci<? #\a #\B)
+=>
+#t
+.
+(char-ci=? #\W #\w)
+=>
+#t
+.
+(char-ci=? #\= #\+)
+=>
+#f
+.
+(let ((c #\R))
+  (list (char<=? #\a c #\z)
+	(char-ci<=? #\a c #\z)))
+=>
+(#f #t)
+<<
+
+(char-alphabetic? #\a)
+=>
+#t
+.
+(char-alphabetic? #\T)
+=>
+#t
+.
+(char-alphabetic? #\8)
+=>
+#f
+.
+(char-alphabetic? #\$)
+=>
+#f
+<<
+
+(char-numeric? #\7)
+=>
+#t
+.
+(char-numeric? #\2)
+=>
+#t
+.
+(char-numeric? #\X)
+=>
+#f
+.
+(char-numeric? #\space)
+=>
+#f
+<<
+
+(char-lower-case? #\r)
+=>
+#t
+.
+(char-lower-case? #\R)
+=>
+#f
+<<
+
+(char-upper-case? #\r)
+=>
+#f
+.
+(char-upper-case? #\R)
+=>
+#t
+<<
+
+(char-whitespace? #\space)
+=>
+#t
+.
+(char-whitespace? #\tab)
+=>
+#t
+.
+(char-whitespace? #\newline)
+=>
+#t
+.
+(char-whitespace? #\return)
+=>
+#t
+.
+(char-whitespace? #\a)
+=>
+#f
+<<
+
+(char-upcase #\g)
+=>
+#\G
+.
+(char-upcase #\Y)
+=>
+#\Y
+.
+(char-upcase #\7)
+=>
+#\7
+<<
+
+(char-downcase #\g)
+=>
+#\g
+.
+(char-downcase #\Y)
+=>
+#\y
+.
+(char-downcase #\7)
+=>
+#\7
+<<
+
+(char->integer #\h)
+=>
+104
+.
+(char->integer #\newline)
+=>
+10
+.
+(integer->char 104)
+=>
+#\h
+<<
+
+(define make-dispatch-table
+  (lambda (alist default)
+    (let ((codes (map char->integer (map car alist))))
+      (display codes) (newline)
+      (let ((first-index (apply min codes))
+	    (last-index (apply max codes)))
+	(let ((n (+ (- last-index first-index) 1)))
+	  (let ((v (make-vector n default)))
+	    (for-each
+	     (lambda (i x) (vector-set! v (- i first-index) x))
+	     codes
+	     (map cdr alist))
+	    ;; table is built; return the table lookup procedure
+	    (lambda (c)
+	      (let ((i (char->integer c)))
+		(if (<= first-index i last-index)
+		    (vector-ref v (- i first-index))
+		    default)))))))))
+(define t (make-dispatch-table
+	   '((#\a . letter) (#\b . letter) (#\0 . digit) (#\1 . digit))
+	   'unknown))
+=
+(t #\b)
+=>
+letter
+.
+(t #\0)
+=>
+digit
+.
+(t #\*)
+=>
+unknown
+<<
+

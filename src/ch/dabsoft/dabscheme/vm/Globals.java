@@ -55,12 +55,27 @@ public class Globals {
         bind("vector-ref", new PrimitiveVectorRef());
         bind("vector", new PrimitiveVector());
         bind("vector-set!", new PrimitiveVectorSetB());
+        bind("make-vector", new PrimitiveMakeVector());
         bind("string", new PrimitiveString());
         bind("string-length", new PrimitiveStringLength());
         bind("string-ref", new PrimitiveStringRef());
         bind("string->symbol", new PrimitiveStringToSymbol());
+        bind("string-set!", new PrimitiveStringSetB());
         bind("make-string", new PrimitiveMakeString());
         bind("char=?", new PrimitiveCharEqP());
+        bind("char<?", new PrimitiveCharLessP());
+        bind("char<=?", new PrimitiveCharLessEqP());
+        bind("char>?", new PrimitiveCharGreaterP());
+        bind("char>=?", new PrimitiveCharGreaterEqP());
+        bind("char-alphabetic?", new PrimitiveCharAlphabeticP());
+        bind("char-numeric?", new PrimitiveCharNumericP());
+        bind("char-upper-case?", new PrimitiveCharUpperCaseP());
+        bind("char-lower-case?", new PrimitiveCharLowerCaseP());
+        bind("char-whitespace?", new PrimitiveCharWhitespaceP());
+        bind("char-upcase", new PrimitiveCharUpcase());
+        bind("char-downcase", new PrimitiveCharDowncase());
+        bind("char->integer", new PrimitiveCharToInteger());
+        bind("integer->char", new PrimitiveIntegerToChar());
         bind("quotient", new PrimitiveQuotient());
         bind("remainder", new PrimitiveRemainder());
         bind("modulo", new PrimitiveModulo());
@@ -69,8 +84,19 @@ public class Globals {
         bind("ceiling", new PrimitiveCeiling());
         bind("round", new PrimitiveRound());
         bind("expt", new PrimitiveExpt());
-        bind("error", new PrimitiveError());
+        bind("exact->inexact", new PrimitiveExactToInexact());
+        bind("inexact->exact", new PrimitiveInexactToExact());
+        bind("string->number", new PrimitiveStringToNumber());
+        bind("number->string", new PrimitiveNumberToString());
+        bind("log", new PrimitiveLog());
+        bind("sin", new PrimitiveSin());
+        bind("cos", new PrimitiveCos());
+        bind("tan", new PrimitiveTan());
+        bind("asin", new PrimitiveAsin());
+        bind("acos", new PrimitiveAcos());
+        bind("atan", new PrimitiveAtan());
         bind("exact?", new PrimitiveExactP());
+        bind("error", new PrimitiveError());
         bind("input-port?", new PrimitiveInputPortP());
         bind("output-port?", new PrimitiveOutputPortP());
         bind("open-input-file", new PrimitiveOpenInputFile());
@@ -97,6 +123,8 @@ public class Globals {
         bind("call-with-values", getCallWithValues());
         bind("eval", new PrimitiveEval(this));
         bind("exit", new PrimitiveExit());
+        bind("PI", Math.PI);
+        bind("E", Math.E);
     }
 
     private Object getCallCC() {

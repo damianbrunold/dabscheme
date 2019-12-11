@@ -628,3 +628,24 @@
 	      r
 	      (loop (cdr ls) (lcm2 (car ls) r)))))))
 
+(define magnitude abs)
+
+(define (exp num)
+  (expt E num))
+
+(define (char-ci=? . chars) (apply char=? (map char-downcase chars)))
+(define (char-ci<? . chars) (apply char<? (map char-downcase chars)))
+(define (char-ci<=? . chars) (apply char<=? (map char-downcase chars)))
+(define (char-ci>? . chars) (apply char>? (map char-downcase chars)))
+(define (char-ci>=? . chars) (apply char>=? (map char-downcase chars)))
+
+(define (string->list s)
+  (do ((i (- (string-length s) 1) (- i 1))
+       (ls '() (cons (string-ref s i) ls)))
+      ((< i 0) ls)))
+
+(define (list->string ls)
+  (let ((s (make-string (length ls))))
+    (do ((ls ls (cdr ls)) (i 0 (+ i 1)))
+	((null? ls) s)
+      (string-set! s i (car ls)))))
