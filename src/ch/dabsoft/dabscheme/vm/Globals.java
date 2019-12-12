@@ -126,6 +126,7 @@ public class Globals {
         bind("write", new PrimitiveWrite(this));
         bind("display", new PrimitiveDisplay(this));
         bind("newline", new PrimitiveNewline(this));
+        bind("flush", new PrimitiveFlush(this));
         bind("values", new PrimitiveValues());
         bind("call-with-current-continuation", getCallCC());
         bind("apply", getApply());
