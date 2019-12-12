@@ -226,15 +226,6 @@
 	((> n 0) +1)
 	(else 0)))
 
-; if performance is an issue, this could be made primitive
-(define (string=? a b)
-  (if (not (= (string-length a) (string-length b)))
-      #f
-      (let loop ((n 0))
-	(cond ((= n (string-length a)) #t)
-	      ((not (char=? (string-ref a n) (string-ref b n))) #f)
-	      (else (loop (+ n 1)))))))
-
 (define (inexact? n)
   (not (exact? n)))
 
@@ -649,3 +640,42 @@
     (do ((ls ls (cdr ls)) (i 0 (+ i 1)))
 	((null? ls) s)
       (string-set! s i (car ls)))))
+
+(define (string-downcase s)
+  (let ((r (string-copy s))
+	(n (string-length s)))
+    (do ((i 0 (+ i 1)))
+	((= i n) r)
+      (string-set! r i (char-downcase (string-ref s i))))))
+	 
+(define (string-upcase s)
+  (let ((r (string-copy s))
+	(n (string-length s)))
+    (do ((i 0 (+ i 1)))
+	((= i n) r)
+      (string-set! r i (char-downcase (string-ref s i))))))
+
+(define (string-ci=? . strs) (apply string=? (map string-downcase strs)))
+(define (string-ci<? . strs) (apply string<? (map string-downcase strs)))
+(define (string-ci<=? . strs) (apply string<=? (map string-downcase strs)))
+(define (string-ci>? . strs) (apply string>? (map string-downcase strs)))
+(define (string-ci>=? . strs) (apply string>=? (map string-downcase strs)))
+
+(define (string-fill! s c)
+  (let ((n (string-length s)))
+    (do ((i 0 (+ i 1)))
+	((= i n))
+      (string-set! s i c))))
+
+
+(define (vector-fill! v x)
+  (let ((n (vector-length v)))
+    (do ((i 0 (+ i 1)))
+	((= i n))
+      (vector-set! v i x))))
+
+(define (list->vector ls)
+  (let ((s (make-vector (length ls))))
+    (do ((ls ls (cdr ls)) (i 0 (+ i 1)))
+	((null? ls) s)
+      (vector-set! s i (car ls)))))

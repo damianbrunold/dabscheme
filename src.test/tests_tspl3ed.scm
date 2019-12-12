@@ -4210,7 +4210,6 @@ d
 (define make-dispatch-table
   (lambda (alist default)
     (let ((codes (map char->integer (map car alist))))
-      (display codes) (newline)
       (let ((first-index (apply min codes))
 	    (last-index (apply max codes)))
 	(let ((n (+ (- last-index first-index) 1)))
@@ -4242,3 +4241,296 @@ digit
 unknown
 <<
 
+(string=? "mom" "mom")
+=>
+#t
+.
+(string<? "mom" "mommy")
+=>
+#t
+.
+(string>? "Dad" "Dad")
+=>
+#f
+.
+(string=? "Mom and Dad" "mom and dad")
+=>
+#f
+.
+(string<? "a" "b" "c")
+=>
+#t
+<<
+
+(string-ci=? "mom" "Mom" "MOM")
+=>
+#t
+.
+(string-ci=? "Mom and Dad" "mom and dad")
+=>
+#t
+.
+(string-ci<=? "say what" "Say What?!")
+=>
+#t
+.
+(string-ci>? "N" "m" "L" "k")
+=>
+#t
+<<
+
+(string)
+=>
+""
+.
+(string #\a #\b #\c)
+=>
+"abc"
+.
+(string #\H #\E #\Y #\!)
+=>
+"HEY!"
+<<
+
+(make-string 0)
+=>
+""
+.
+(make-string 0 #\x)
+=>
+""
+.
+(make-string 5 #\x)
+=>
+"xxxxx"
+<<
+
+(string-length "abc")
+=>
+3
+.
+(string-length "")
+=>
+0
+.
+(string-length "hi there")
+=>
+8
+.
+(string-length (make-string 1000000))
+=>
+1000000
+<<
+
+(string-ref "hi there" 0)
+=>
+#\h
+.
+(string-ref "hi there" 5)
+=>
+#\e
+<<
+
+(let ((str "hi three"))
+  (string-set! str 5 #\e)
+  (string-set! str 6 #\r)
+  str)
+=>
+"hi there"
+<<
+
+(string-copy "abc")
+=>
+"abc"
+.
+(let ((str "abc"))
+  (eq? str (string-copy str)))
+=>
+#f
+<<
+
+(string-append)
+=>
+""
+.
+(string-append "abc" "def")
+=>
+"abcdef"
+.
+(string-append "Hey " "you " "there!")
+=>
+"Hey you there!"
+<<
+
+(substring "hi there" 0 1)
+=>
+"h"
+.
+(substring "hi there" 3 6)
+=>
+"the"
+.
+(substring "hi there" 5 5)
+=>
+""
+.
+(let ((str "hi there"))
+  (let ((end (string-length str)))
+    (substring str 0 end)))
+=>
+"hi there"
+.
+(substring "hi there" 3)
+=>
+"there"
+.
+(substring "hi there")
+=>
+"hi there"
+.
+(substring "hi there" -5)
+=>
+"there"
+.
+(substring "hi there" -5 -2)
+=>
+"the"
+.
+(substring "hi there" 0 -6)
+=>
+"hi"
+<<
+
+(let ((str (string-copy "sleepy")))
+  (string-fill! str #\Z)
+  str)
+=>
+"ZZZZZZ"
+<<
+
+(string->list "")
+=>
+()
+.
+(string->list "abc")
+=>
+(#\a #\b #\c)
+.
+(apply char<? (string->list "abc"))
+=>
+#t
+.
+(map char-upcase (string->list "abc"))
+=>
+(#\A #\B #\C)
+<<
+
+(list->string '())
+=>
+""
+.
+(list->string '(#\a #\b #\c))
+=>
+"abc"
+.
+(list->string
+ (map char-upcase
+      (string->list "abc")))
+=>
+"ABC"
+<<
+
+(vector)
+=>
+#()
+.
+(vector 'a 'b 'c)
+=>
+#(a b c)
+<<
+
+(make-vector 0)
+=>
+#()
+.
+(make-vector 0 'a)
+=>
+#()
+.
+(make-vector 5 'a)
+=>
+#(a a a a a)
+<<
+
+(vector-length '#())
+=>
+0
+.
+(vector-length '#(a b c))
+=>
+3
+.
+(vector-length (vector 1 2 3 4))
+=>
+4
+.
+(vector-length (make-vector 300))
+=>
+300
+<<
+
+(vector-ref '#(a b c) 0)
+=>
+a
+.
+(vector-ref '#(a b c) 1)
+=>
+b
+.
+(vector-ref '#(x y z w) 3)
+=>
+w
+<<
+
+(let ((v (vector 'a 'b 'c 'd 'e)))
+  (vector-set! v 2 'x)
+  v)
+=>
+#(a b x d e)
+<<
+
+(let ((v (vector 1 2 3)))
+  (vector-fill! v 0)
+  v)
+=>
+#(0 0 0)
+<<
+
+(vector->list (vector))
+=>
+()
+.
+(vector->list '#(a b c))
+=>
+(a b c)
+.
+(let ((v #(1 2 3 4 5)))
+  (apply * (vector->list v)))
+=>
+120
+<<
+
+(list->vector '())
+=>
+#()
+.
+(list->vector '(a b c))
+=>
+#(a b c)
+.
+(let ((v '#(1 2 3 4 5)))
+  (let ((ls (vector->list v)))
+    (list->vector (map * ls ls))))
+=>
+#(1 4 9 16 25)
+<<

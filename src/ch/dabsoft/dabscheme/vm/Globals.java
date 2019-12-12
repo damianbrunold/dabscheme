@@ -62,6 +62,14 @@ public class Globals {
         bind("string->symbol", new PrimitiveStringToSymbol());
         bind("string-set!", new PrimitiveStringSetB());
         bind("make-string", new PrimitiveMakeString());
+        bind("string=?", new PrimitiveStringEqP());
+        bind("string<?", new PrimitiveStringLessP());
+        bind("string<=?", new PrimitiveStringLessEqP());
+        bind("string>?", new PrimitiveStringGreaterP());
+        bind("string>=?", new PrimitiveStringGreaterEqP());
+        bind("string-copy", new PrimitiveStringCopy());
+        bind("string-append", new PrimitiveStringAppend());
+        bind("substring", new PrimitiveSubstring());
         bind("char=?", new PrimitiveCharEqP());
         bind("char<?", new PrimitiveCharLessP());
         bind("char<=?", new PrimitiveCharLessEqP());
