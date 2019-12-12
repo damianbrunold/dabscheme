@@ -596,6 +596,20 @@
 	(lambda () (thunk))
 	(lambda () (set! *output-port* orig-output-port) (close-output-port p)))))
 
+(define (call-with-input-string str proc)
+  (let ((p (open-input-string str)))
+    (let ((v (proc p)))
+      (close-input-port p)
+      v)))
+
+(define (with-input-from-string str thunk)
+  (let ((p (open-input-string str))
+	(orig-input-port *input-port*))
+    (dynamic-wind
+	(lambda () (set! *input-port* p))
+	(lambda () (thunk))
+	(lambda () (set! *input-port* orig-input-port) (close-input-port p)))))
+
 (define (gcd . ls)
   (let ((gcd2 (lambda (a b)
 		(let loop ((a a) (b b))

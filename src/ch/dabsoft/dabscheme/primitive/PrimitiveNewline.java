@@ -22,7 +22,7 @@ public class PrimitiveNewline extends Primitive {
         if (arguments.length == 0) {
             port = Value.asOutputPort(globals.resolve("*output-port*"));
         } else {
-            port = Value.asOutputPort(arguments[1]);
+            port = Value.asOutputPort(arguments[0]);
         }
         try {
             port.write("\n");

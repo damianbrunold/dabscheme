@@ -3935,16 +3935,6 @@ d
 27.0
 <<
 
-(input-port? (current-input-port))
-=>
-#t
-<<
-
-(output-port? (current-output-port))
-=>
-#t
-<<
-
 (exact->inexact 3)
 =>
 3.0
@@ -4565,3 +4555,73 @@ x
 =>
 "()"
 <<
+
+(input-port? (current-input-port))
+=>
+#t
+.
+(input-port? (open-input-string "hi"))
+=>
+#t
+<<
+
+(output-port? (current-output-port))
+=>
+#t
+.
+(output-port? (open-output-string))
+=>
+#t
+<<
+
+(let ((p (open-input-string "1 2 3 4 5")))
+  (let f ((x (read p)))
+    (if (eof-object? x)
+	(begin
+	  (close-input-port p)
+	  '())
+	(cons x (f (read p))))))
+=>
+(1 2 3 4 5)
+<<
+
+(call-with-input-string "1 2 3 4 5"
+			(lambda (p)
+			  (let f ((x (read p)))
+			    (if (eof-object? x)
+				'()
+				(cons x (f (read p)))))))
+=>
+(1 2 3 4 5)
+<<
+
+(define (read-word p)
+  (list->string
+   (let f ()
+     (let ((c (peek-char p)))
+       (cond
+	((eof-object? c) '())
+	((char-alphabetic? c)
+	 (read-char p)
+	 (cons c (f)))
+	(else '()))))))
+(define p (open-input-string "hello world"))
+=
+(read-word p)
+=>
+"hello"
+<<
+
+(let ((p (open-output-string)))
+  (let f ((ls '(1 2 3 4 5)))
+    (if (not (null? ls))
+	(begin
+	  (write (car ls) p)
+	  (newline p)
+	  (f (cdr ls)))))
+  (get-output-string p))
+=>
+"1\n2\n3\n4\n5\n"
+<<
+
+    
