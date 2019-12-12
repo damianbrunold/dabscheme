@@ -4534,3 +4534,34 @@ w
 =>
 #(1 4 9 16 25)
 <<
+
+(string->symbol "x")
+=>
+x
+.
+(eq? (string->symbol "x") 'x)
+=>
+#t
+.
+(eq? (string->symbol "X") 'x)
+=>
+#f
+.
+(eq? (string->symbol "x")
+     (string->symbol "x"))
+=>
+#t
+<<
+
+(symbol->string 'xyz)
+=>
+"xyz"
+.
+(symbol->string (string->symbol "Hi"))
+=>
+"Hi"
+.
+(symbol->string (string->symbol "()"))
+=>
+"()"
+<<

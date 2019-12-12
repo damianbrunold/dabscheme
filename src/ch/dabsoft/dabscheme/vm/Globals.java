@@ -70,6 +70,7 @@ public class Globals {
         bind("string-copy", new PrimitiveStringCopy());
         bind("string-append", new PrimitiveStringAppend());
         bind("substring", new PrimitiveSubstring());
+        bind("symbol->string", new PrimitiveSymbolToString());
         bind("char=?", new PrimitiveCharEqP());
         bind("char<?", new PrimitiveCharLessP());
         bind("char<=?", new PrimitiveCharLessEqP());
