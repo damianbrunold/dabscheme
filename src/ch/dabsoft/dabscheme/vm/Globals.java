@@ -138,6 +138,8 @@ public class Globals {
         bind("instruction-opcode", new PrimitiveInstructionOpcode());
         bind("instruction-arg1", new PrimitiveInstructionArg1());
         bind("instruction-arg2", new PrimitiveInstructionArg2());
+        bind("make-instruction", new PrimitiveMakeInstruction());
+        bind("set-code!", new PrimitiveSetCodeB());
         bind("exit", new PrimitiveExit());
         bind("PI", Math.PI);
         bind("E", Math.E);

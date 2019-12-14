@@ -693,3 +693,9 @@
     (do ((ls ls (cdr ls)) (i 0 (+ i 1)))
 	((null? ls) s)
       (vector-set! s i (car ls)))))
+
+(define (vector-copy v)
+  (let ((r (make-vector (vector-length v))) (n (vector-length v)))
+    (do ((i 0 (+ i 1)))
+	((= i n) r)
+      (vector-set! r i (vector-ref v i)))))
