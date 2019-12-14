@@ -15,6 +15,7 @@ public class PrimitiveCompile extends Primitive {
 
     @Override
     public Object apply(Object[] arguments) {
+        if (arguments.length != 1) throw new IllegalStateException("compile expected 1 argument, but got " + arguments.length);
         Compiler compiler = new Compiler(globals);
         Object result = compiler.compile(arguments[0]);
         return result;

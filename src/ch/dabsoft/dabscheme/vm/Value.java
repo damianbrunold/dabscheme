@@ -62,6 +62,7 @@ public class Value {
     }
     public static PushbackReader asInputPort(Object value) { return (PushbackReader) value; }
     public static Writer asOutputPort(Object value) { return (Writer) value; }
+    public static Instruction asInstruction(Object value) { return (Instruction) value; }
 
     public static boolean isValues(Object value) { return value instanceof Values; }
     public static boolean isInteger(Object value) {
@@ -97,6 +98,7 @@ public class Value {
     public static boolean isInputPort(Object value) { return value instanceof PushbackReader; }
     public static boolean isOutputPort(Object value) { return value instanceof Writer; }
     public static boolean isEOFObject(Object value) { return value instanceof Byte && value == EOF;}
+    public static boolean isInstruction(Object value) { return value instanceof Instruction; }
 
     public static boolean isAtom(Object value) { return isConstant(value) || isSymbol(value); }
     public static boolean isConstant(Object value) { return isInteger(value) || isReal(value) || isBoolean(value) || isString(value) || isChar(value); }
@@ -112,6 +114,7 @@ public class Value {
         if (isInputPort(value)) return "#<input-port>";
         if (isOutputPort(value)) return "#<output-port>";
         if (isEOFObject(value)) return "#<eof>";
+        if (isInstruction(value)) return printRepInstruction(asInstruction(value));
         return value.toString(); // TODO
     }
 
@@ -180,6 +183,16 @@ public class Value {
         return result.toString();
     }
 
+    private static String printRepInstruction(Instruction instruction) {
+        StringBuilder result = new StringBuilder();
+        result.append("#<");
+        result.append(instruction.opcode);
+        if (instruction.arg1 != null) result.append(" ").append(printRep(instruction.arg1));
+        if (instruction.arg2 != null) result.append(" ").append(printRep(instruction.arg2));
+        result.append(">");
+        return result.toString();
+    }
+
     public static String displayRep(Object value) {
         if (isValues(value)) return displayRepValues(asValues(value));
         if (isInteger(value) || isReal(value) || isSymbol(value)) return value.toString();
@@ -191,6 +204,7 @@ public class Value {
         if (isInputPort(value)) return "#<input-port>";
         if (isOutputPort(value)) return "#<output-port>";
         if (isEOFObject(value)) return "#<eof>";
+        if (isInstruction(value)) return displayRepInstruction(asInstruction(value));
         return value.toString(); // TODO
     }
 
@@ -239,6 +253,14 @@ public class Value {
             result.append(displayRep(value)).append("\n");
         }
         if (result.length() > 0) result.setLength(result.length() - 1);
+        return result.toString();
+    }
+
+    private static String displayRepInstruction(Instruction instruction) {
+        StringBuilder result = new StringBuilder();
+        result.append(instruction.opcode);
+        if (instruction.arg1 != null) result.append(" ").append(printRep(instruction.arg1));
+        if (instruction.arg2 != null) result.append(" ").append(printRep(instruction.arg2));
         return result.toString();
     }
 

@@ -132,6 +132,12 @@ public class Globals {
         bind("apply", getApply());
         bind("call-with-values", getCallWithValues());
         bind("eval", new PrimitiveEval(this));
+        bind("disassemble", new PrimitiveDisassemble(this));
+        bind("get-code", new PrimitiveGetCode());
+        bind("get-env", new PrimitiveGetEnv());
+        bind("instruction-opcode", new PrimitiveInstructionOpcode());
+        bind("instruction-arg1", new PrimitiveInstructionArg1());
+        bind("instruction-arg2", new PrimitiveInstructionArg2());
         bind("exit", new PrimitiveExit());
         bind("PI", Math.PI);
         bind("E", Math.E);
