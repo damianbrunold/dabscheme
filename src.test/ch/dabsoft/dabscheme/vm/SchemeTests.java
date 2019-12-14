@@ -24,6 +24,11 @@ public class SchemeTests {
     }
 
     @Test
+    public void testR6RS() throws IOException {
+        runTests("/tests_r6rs.scm");
+    }
+
+    @Test
     public void testR7RS() throws IOException {
         runTests("/tests_r7rs.scm");
     }

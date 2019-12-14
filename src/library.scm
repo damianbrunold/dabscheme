@@ -699,3 +699,46 @@
     (do ((i 0 (+ i 1)))
 	((= i n) r)
       (vector-set! r i (vector-ref v i)))))
+
+(define (find proc lst)
+  (cond ((null? lst) #f)
+	((proc (car lst)) (car lst))
+	(else (find proc (cdr lst)))))
+
+(define (for-all proc . lsts)
+  (cond ((null? (car lsts)) #f)
+	((null? (cdar lsts)) (apply proc (map car lsts)))
+	((apply proc (map car lsts)) (apply for-all proc (map cdr lsts)))
+	(else #f)))
+
+(define (exists proc . lsts)
+  (cond ((null? (car lsts)) #f)
+	((null? (cdar lsts)) (apply proc (map car lsts)))
+	(else (let ((value (apply proc (map car lsts))))
+		(if value
+		    value
+		    (apply exists proc (map cdr lsts)))))))
+
+(define (filter proc lst)
+  (cond ((null? lst) '())
+	((proc (car lst)) (cons (car lst) (filter proc (cdr lst))))
+	(else (filter proc (cdr lst)))))
+
+(define (partition proc lst)
+  (let loop ((ls lst) (a '()) (b '()))
+    (cond ((null? ls) (values (reverse a) (reverse b)))
+	  ((proc (car ls)) (loop (cdr ls) (cons (car ls) a) b))
+	  (else (loop (cdr ls) a (cons (car ls) b))))))
+
+(define (fold-left combine nil . lsts)
+  (let loop ((r nil) (lsts lsts))
+    (if (null? (car lsts))
+	r
+	(loop (apply combine r (map car lsts)) (map cdr lsts)))))
+
+(define (fold-right combine nil . lsts)
+  (let loop ((r nil) (lsts (map reverse lsts)))
+    (if (null? (car lsts))
+	r
+	(loop (apply combine (append (map car lsts) (list r))) (map cdr lsts)))))
+
