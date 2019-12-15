@@ -168,3 +168,19 @@ odd
 =>
 4
 <<
+
+(let ((a 'a) (b 'b) (x 'x) (y 'y))
+  (let-values (((a b) (values x y))
+	       ((x y) (values a b)))
+    (list a b x y)))
+=>
+(x y a b)
+<<
+
+(let ((a 'a) (b 'b) (x 'x) (y 'y))
+  (let*-values (((a b) (values x y))
+	       ((x y) (values a b)))
+    (list a b x y)))
+=>
+(x y x y)
+<<
