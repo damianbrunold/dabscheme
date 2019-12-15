@@ -760,3 +760,26 @@
 	r
 	(loop (apply combine (append (map car lsts) (list r))) (map cdr lsts)))))
 
+(define (string-join string-list . maybe-args)
+  (let ((delimiter " ")
+	(grammar 'infix))
+    (if (> (length maybe-args) 0) (set! delimiter (first maybe-args)))
+    (if (> (length maybe-args) 1) (set! grammar (second maybe-args)))
+    (let loop ((out (open-output-string)) (string-list string-list))
+      (if (null? string-list)
+	  (get-output-string out)
+	  (case grammar
+	    ((infix)
+	     (display (car string-list) out)
+	     (unless (null? (cdr string-list)) (display delimiter out))
+	     (loop out (cdr string-list)))
+	    ((suffix)
+	     (display (car string-list) out)
+	     (display delimiter out)
+	     (loop out (cdr string-list)))
+	    ((prefix)
+	     (display delimiter out)
+	     (display (car string-list) out)
+	     (loop out (cdr string-list))))))))
+
+		      

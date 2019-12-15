@@ -184,3 +184,71 @@ odd
 =>
 (x y x y)
 <<
+
+(string-join '("foo" "bar" "baz") ":")
+=>
+"foo:bar:baz"
+.
+(string-join '("foo" "bar" "baz") ":" 'suffix)
+=>
+"foo:bar:baz:"
+.
+(string-join '()   ":")
+=>
+""
+.
+(string-join '("") ":")
+=>
+""
+.
+(string-join '()   ":" 'suffix)
+=>
+""
+.
+(string-join '("") ":" 'suffix)
+=>
+":"
+<<
+
+(string-join '("a" "b" "c") "-" 'prefix)
+=>
+"-a-b-c"
+.
+(string-join '("a" "b" "c") "-" 'infix)
+=>
+"a-b-c"
+.
+(string-join '("a" "b" "c") "-" 'suffix)
+=>
+"a-b-c-"
+.
+(string-join '("a") "-" 'prefix)
+=>
+"-a"
+.
+(string-join '("a") "-" 'infix)
+=>
+"a"
+.
+(string-join '("a") "-" 'suffix)
+=>
+"a-"
+<<
+
+(string-split "a b c")
+=>
+("a" "b" "c")
+.
+(string-split "a b\t c\n\rd")
+=>
+("a" "b" "c" "d")
+.
+(string-split "31.12.2016" "[.]")
+=>
+("31" "12" "2016")
+<<
+
+(string-split-vector "a b c")
+=>
+#("a" "b" "c")
+<<

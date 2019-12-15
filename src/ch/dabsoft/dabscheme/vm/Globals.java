@@ -115,6 +115,8 @@ public class Globals {
         bind("open-output-string", new PrimitiveOpenOutputString());
         bind("get-output-string", new PrimitiveGetOutputString());
         bind("close-output-port", new PrimitiveCloseOutputPort());
+        bind("string-split", new PrimitiveStringSplit());
+        bind("string-split-vector", new PrimitiveStringSplitVector());
         bind("read-char", new PrimitiveReadChar(this));
         bind("peek-char", new PrimitivePeekChar(this));
         bind("char-ready?", new PrimitiveCharReadyP(this));
