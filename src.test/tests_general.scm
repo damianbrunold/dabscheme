@@ -252,3 +252,52 @@ odd
 =>
 #("a" "b" "c")
 <<
+
+(string-take "Pete Szilagyi" 6)
+=>
+"Pete S"
+.
+(string-drop "Pete Szilagyi" 6)
+=>
+"zilagyi"
+<<
+
+(string-take-right "Beta rules" 5)
+=>
+"rules"
+.
+(string-drop-right "Beta rules" 5)
+=>
+"Beta "
+<<
+
+(string-skip "  abc  ")
+=>
+2
+.
+(string-skip-right "  abc  ")
+=>
+4
+<<
+
+(string-index "  abca  " #\a)
+=>
+2
+.
+(string-index-right "  abca  " #\a)
+=>
+5
+<<
+
+(string-trim "  The outlook wasn't brilliant,  \n\r")
+=>
+"The outlook wasn't brilliant,  \n\r"
+.
+(string-trim-right "  The outlook wasn't brilliant,  \n\r")
+=>
+"  The outlook wasn't brilliant,"
+.
+(string-trim-both "  The outlook wasn't brilliant,  \n\r")
+=>
+"The outlook wasn't brilliant,"
+<<
