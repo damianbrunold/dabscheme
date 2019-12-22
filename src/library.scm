@@ -895,3 +895,13 @@
 	    (i1 (substring s i1))
 	    (i2 (substring s 0 (+ i2 1)))
 	    (else s)))))
+
+(define (zip a b)
+  (cond ((null? a)
+	 (if (null? b)
+	     '()
+	     (error 'zip "lists have different lengths")))
+	((null? b)
+	 (error 'zip "lists have different lengths"))
+	(else
+	 (cons (cons (car a) (car b)) (zip (cdr a) (cdr b))))))
