@@ -142,6 +142,13 @@ public class Globals {
         bind("instruction-arg2", new PrimitiveInstructionArg2());
         bind("make-instruction", new PrimitiveMakeInstruction());
         bind("set-code!", new PrimitiveSetCodeB());
+        bind("make-dict", new PrimitiveMakeDict());
+        bind("dict-put", new PrimitiveDictPut());
+        bind("dict-get", new PrimitiveDictGet());
+        bind("dict-contains", new PrimitiveDictContains());
+        bind("dict-clear", new PrimitiveDictClear());
+        bind("dict-keys", new PrimitiveDictKeys());
+        bind("dict-size", new PrimitiveDictSize());
         bind("exit", new PrimitiveExit());
         bind("PI", Math.PI);
         bind("E", Math.E);

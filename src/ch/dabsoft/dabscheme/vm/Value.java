@@ -63,6 +63,7 @@ public class Value {
     public static PushbackReader asInputPort(Object value) { return (PushbackReader) value; }
     public static Writer asOutputPort(Object value) { return (Writer) value; }
     public static Instruction asInstruction(Object value) { return (Instruction) value; }
+    public static HashMap asDict(Object value) { return (HashMap) value; }
 
     public static boolean isValues(Object value) { return value instanceof Values; }
     public static boolean isInteger(Object value) {
@@ -99,6 +100,7 @@ public class Value {
     public static boolean isOutputPort(Object value) { return value instanceof Writer; }
     public static boolean isEOFObject(Object value) { return value instanceof Byte && value == EOF;}
     public static boolean isInstruction(Object value) { return value instanceof Instruction; }
+    public static boolean isDict(Object value) { return value instanceof HashMap; }
 
     public static boolean isAtom(Object value) { return isConstant(value) || isSymbol(value); }
     public static boolean isConstant(Object value) { return isInteger(value) || isReal(value) || isBoolean(value) || isString(value) || isChar(value); }
@@ -114,6 +116,7 @@ public class Value {
         if (isInputPort(value)) return "#<input-port>";
         if (isOutputPort(value)) return "#<output-port>";
         if (isEOFObject(value)) return "#<eof>";
+        if (isDict(value)) return "#<dict>";
         if (isInstruction(value)) return printRepInstruction(asInstruction(value));
         return value.toString(); // TODO
     }
@@ -204,6 +207,7 @@ public class Value {
         if (isInputPort(value)) return "#<input-port>";
         if (isOutputPort(value)) return "#<output-port>";
         if (isEOFObject(value)) return "#<eof>";
+        if (isDict(value)) return "#<dict>";
         if (isInstruction(value)) return displayRepInstruction(asInstruction(value));
         return value.toString(); // TODO
     }
